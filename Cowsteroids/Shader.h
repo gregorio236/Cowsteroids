@@ -2,7 +2,6 @@
 #define SHADER_H
 
 #include <glm\glm.hpp>
-using namespace glm;
 
 class Shader
 {
@@ -17,13 +16,15 @@ public:
 	void Compile(const char* vertSource, const char* fragSource);
 
 	//Atribui o valor de um uniform int
-	void SetUniform(const char* name, int &value) const;
+	void SetUniform(const char* name, int value) const;
 	//Atribui o valor de um uniform float
-	void SetUniform(const char* name, float &value) const;
+	void SetUniform(const char* name, float value) const;
 	//Atribui o valor de um uniform vec3
-	void SetUniform(const char* name, vec3 &value) const;
+	void SetUniform(const char* name, glm::vec3 &value) const;
 	//Atribui o valor de um uniform mat4
-	void SetUniform(const char* name, mat4 &value) const;
+	void SetUniform(const char* name, glm::mat4 &value) const;
+
+	void Clear();
 
 private:
 	unsigned int ID;

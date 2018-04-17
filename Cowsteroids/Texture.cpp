@@ -1,10 +1,14 @@
 #include "Texture.h"
 
 #include <iostream>
-using namespace std;
 
 #include <GL\glew.h>
 #include <SOIL.h>
+
+Texture::Texture()
+{
+
+}
 
 Texture::Texture(bool hasAlpha)
 {
@@ -56,4 +60,9 @@ void Texture::Generate(int width, int height, unsigned char * data)
 void Texture::Use() const
 {
 	glBindTexture(GL_TEXTURE_2D, this->ID);
+}
+
+void Texture::Clear()
+{
+	glDeleteTextures(1, &this->ID);
 }

@@ -4,6 +4,7 @@
 class Texture
 {
 public:
+	Texture();
 	Texture(bool hasAlpha);
 	~Texture();
 
@@ -11,6 +12,9 @@ public:
 	void Generate(int width, int height, unsigned char* data);
 
 	void Use() const;
+
+	void Clear();
+
 private:
 	unsigned int ID;
 	int width;

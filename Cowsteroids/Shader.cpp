@@ -1,7 +1,6 @@
 #include "Shader.h"
 
 #include <iostream>
-using namespace std;
 
 #include <GL\glew.h>
 #include <glm\gtc\type_ptr.hpp>
@@ -56,26 +55,31 @@ void Shader::Compile(const char * vertSource, const char * fragSource)
 	glDeleteShader(fragID);
 }
 
-void Shader::SetUniform(const char * name, int &value) const
+void Shader::SetUniform(const char * name, int value) const
 {
 	//Primeiro encontra o local onde esta o uniform
 	//Depois troca o valor dele para value
 	glUniform1i(glGetUniformLocation(this->ID, name), value);
 }
 
-void Shader::SetUniform(const char * name, float &value) const
+void Shader::SetUniform(const char * name, float value) const
 {
 	glUniform1f(glGetUniformLocation(this->ID, name), value);
 }
 
-void Shader::SetUniform(const char * name, vec3 &value) const
+void Shader::SetUniform(const char * name, glm::vec3 &value) const
 {
 	glUniform3f(glGetUniformLocation(this->ID, name), value.x, value.y, value.z);
 }
 
-void Shader::SetUniform(const char * name, mat4 &value) const
+void Shader::SetUniform(const char * name, glm::mat4 &value) const
 {
 	glUniformMatrix4fv(glGetUniformLocation(this->ID, name), 1, false, value_ptr(value));
+}
+
+void Shader::Clear()
+{
+	glDeleteProgram(this->ID);
 }
 
 void Shader::checkCompileErrors(unsigned int shader, const char * type) const
@@ -92,7 +96,7 @@ void Shader::checkCompileErrors(unsigned int shader, const char * type) const
 		{
 			//Se nao, pega as informacoes e escreve no console
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << endl << infoLog << endl << "=====/-/=====/=====/-/=====/=====/-/=====" << endl;
+			std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << std::endl << infoLog << "\n=====/-/=====/=====/-/=====/=====/-/=====\n";
 		}
 	}
 	else
@@ -102,7 +106,7 @@ void Shader::checkCompileErrors(unsigned int shader, const char * type) const
 		if (!success)
 		{
 			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-			cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << endl << infoLog << endl << "=====/-/=====/=====/-/=====/=====/-/=====" << endl;
+			std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << std::endl << infoLog << "\n=====/-/=====/=====/-/=====/=====/-/=====\n";
 		}
 	}
 }
