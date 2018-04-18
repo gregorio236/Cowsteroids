@@ -23,6 +23,7 @@ public:
 	void Update(float dt);
 	void Render();
 
+
 private:
 	GameState state;
 	bool keys[1024];
