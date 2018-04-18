@@ -24,6 +24,7 @@ public:
 	void Render();
 
 
+
 private:
 	GameState state;
 	bool keys[1024];
