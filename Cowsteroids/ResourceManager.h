@@ -17,7 +17,6 @@ public:
 
 	static void Clear();
 
-
 private:
 	static std::map<const char*, Shader> shaders;
 	static std::map<const char*, Texture> textures;
