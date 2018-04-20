@@ -59,10 +59,12 @@ void Texture::Generate(int width, int height, unsigned char * data)
 
 void Texture::Use() const
 {
+	//Ativa a textura
 	glBindTexture(GL_TEXTURE_2D, this->ID);
 }
 
 void Texture::Clear()
 {
+	//Deleta a textura
 	glDeleteTextures(1, &this->ID);
 }

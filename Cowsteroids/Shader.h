@@ -24,9 +24,11 @@ public:
 	//Atribui o valor de um uniform mat4
 	void SetUniform(const char* name, glm::mat4 &value) const;
 
+	//Deleta esse shader da memoria do opengl
 	void Clear();
 
 private:
+	//ID do shader no opengl
 	unsigned int ID;
 
 	//Checa erros durante a compilacao

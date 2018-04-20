@@ -35,7 +35,7 @@ void Shader::Compile(const char * vertSource, const char * fragSource)
 	//Checa erros de compilacao do shader
 	checkCompileErrors(vertID, "VERTEX");
 
-	//A mesma coisa que o anterior, so fragment
+	//A mesma coisa que o anterior, so que fragment
 	fragID = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragID, 1, &fragSource, NULL);
 	glCompileShader(fragID);
@@ -51,6 +51,7 @@ void Shader::Compile(const char * vertSource, const char * fragSource)
 	//Checa erros
 	checkCompileErrors(this->ID, "PROGRAM");
 
+	//Marca os shaders para serem deletados quando o program for deletado
 	glDeleteShader(vertID);
 	glDeleteShader(fragID);
 }
@@ -79,6 +80,7 @@ void Shader::SetUniform(const char * name, glm::mat4 &value) const
 
 void Shader::Clear()
 {
+	//Deleta o shader prorgam da memoria do opengl
 	glDeleteProgram(this->ID);
 }
 
