@@ -20,9 +20,9 @@ public:
 	//Atribui o valor de um uniform float
 	void SetUniform(const char* name, float value) const;
 	//Atribui o valor de um uniform vec3
-	void SetUniform(const char* name, glm::vec3 &value) const;
+	void SetUniform(const char* name, const glm::vec3 &value) const;
 	//Atribui o valor de um uniform mat4
-	void SetUniform(const char* name, glm::mat4 &value) const;
+	void SetUniform(const char* name, const glm::mat4 &value) const;
 
 	//Deleta esse shader da memoria do opengl
 	void Clear();

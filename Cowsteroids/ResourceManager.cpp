@@ -11,24 +11,24 @@
 std::map<const char*, Shader> ResourceManager::shaders;
 std::map<const char*, Texture> ResourceManager::textures;
 
-Shader& ResourceManager::LoadShader(const char * vertFile, const char * fragFile, const char * name)
+Shader ResourceManager::LoadShader(const char * vertFile, const char * fragFile, const char * name)
 {
 	shaders[name] = loadShaderFromFile(vertFile, fragFile);
 	return shaders[name];
 }
 
-Shader& ResourceManager::GetShader(const char * name)
+Shader ResourceManager::GetShader(const char * name)
 {
 	return shaders[name];
 }
 
-Texture& ResourceManager::LoadTexture(const char * file, bool hasAlpha, const char * name)
+Texture ResourceManager::LoadTexture(const char * file, bool hasAlpha, const char * name)
 {
 	textures[name] = loadTextureFromFile(file, hasAlpha);
 	return textures[name];
 }
 
-Texture& ResourceManager::GetTexture(const char * name)
+Texture ResourceManager::GetTexture(const char * name)
 {
 	return textures[name];
 }
@@ -45,7 +45,7 @@ void ResourceManager::Clear()
 	}
 }
 
-Shader & ResourceManager::loadShaderFromFile(const char * vertFile, const char * fragFile)
+Shader ResourceManager::loadShaderFromFile(const char * vertFile, const char * fragFile)
 {
 	std::string vertCode;
 	std::string fragCode;
@@ -80,7 +80,7 @@ Shader & ResourceManager::loadShaderFromFile(const char * vertFile, const char *
 	return shader;
 }
 
-Texture & ResourceManager::loadTextureFromFile(const char * file, bool hasAlpha)
+Texture ResourceManager::loadTextureFromFile(const char * file, bool hasAlpha)
 {
 	Texture texture(hasAlpha);
 	int width, height;

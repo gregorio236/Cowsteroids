@@ -16,6 +16,7 @@ void main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Cowsteroids", nullptr, nullptr);
+	glfwMakeContextCurrent(window);
 
 	glewExperimental = true;
 	glewInit();
@@ -55,6 +56,8 @@ void main()
 	}
 
 	glfwTerminate();
+
+	delete cowsteroids;
 }
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)

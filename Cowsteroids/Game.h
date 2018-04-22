@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "SpriteRenderer.h"
+
 enum GameState
 {
 	ACTIVE,
@@ -30,6 +32,8 @@ private:
 	bool keys[1024];
 	int width;
 	int height;
+
+	SpriteRenderer* spriteRenderer;
 };
 
 #endif

@@ -17,11 +17,49 @@ SpriteRenderer::~SpriteRenderer()
 
 void SpriteRenderer::DrawSprite(Texture & texture, glm::vec2 pos, glm::vec2 size, float rotation, glm::vec3 color)
 {
+	//Matriz modelo da sprite
+	glm::mat4 model = {
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
 
+	//Primeiro se escala, depois se rotaciona e por ultimo se translada a matriz
+	//Mas como é multiplicado, é feio ao contrario
+
+	//Translacao para a posicao
+	model = glm::translate(model, glm::vec3(pos, 0.0f));
+
+	//Primeiro leva o centro da imagem para o centro ortografico
+	model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));
+	//Paara depois rotacionar
+	model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+	//E depois voltar para a posicao original
+	model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
+
+	//Escalonamento do modelo
+	model = glm::scale(model, glm::vec3(size, 1.0f));
+
+	//Ativa o shader e define os uniforms
+	this->shader.Use().SetUniform("model", model);
+	this->shader.SetUniform("spriteColor", color);
+
+	//Ativa a textura
+	glActiveTexture(GL_TEXTURE0);
+	texture.Use();
+
+	//Ativa o VAO
+	glBindVertexArray(this->VAO);
+	//Desenha os dois triangulos
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	//Desativa o VAO
+	glBindVertexArray(0);
 }
 
 void SpriteRenderer::initialize()
 {
+	//Dois triangulos
 	float vertices[] = {
 		//Pos       //Textura
 		0.0f, 1.0f,  0.0f, 1.0f, //esq-cima
