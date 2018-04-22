@@ -13,17 +13,12 @@ Game::Game(int width, int height)
 
 Game::~Game()
 {
-
+	delete spriteRenderer;
 }
 
 void Game::SetState(GameState state)
 {
 	this->state = state;
-}
-
-void Game::SetKey(int key, bool active)
-{
-	this->keys[key] = active;
 }
 
 void Game::Initialize()

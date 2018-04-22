@@ -2,6 +2,7 @@
 #include <GLFW\glfw3.h>
 
 #include "Game.h"
+#include "InputManager.h"
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
@@ -70,11 +71,11 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 	{
 		if (action == GLFW_PRESS)
 		{
-			cowsteroids->SetKey(key, true);
+			InputManager::PollKey(key, true);
 		}
 		else if (action == GLFW_RELEASE)
 		{
-			cowsteroids->SetKey(key, false);
+			InputManager::PollKey(key, false);
 		}
 	}
 }

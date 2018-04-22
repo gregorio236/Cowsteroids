@@ -17,7 +17,6 @@ public:
 	~Game();
 
 	void SetState(GameState state);
-	void SetKey(int key, bool active);
 
 	void Initialize();
 
@@ -29,7 +28,6 @@ public:
 
 private:
 	GameState state;
-	bool keys[1024];
 	int width;
 	int height;
 
