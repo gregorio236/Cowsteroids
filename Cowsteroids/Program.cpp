@@ -44,7 +44,8 @@ void main()
 		lastFrame = currentFrame;
 
 		glfwPollEvents();
-
+		InputManager::UpdateKeys();
+		
 		cowsteroids->ProcessInput(deltaTime);
 		cowsteroids->Update(deltaTime);
 

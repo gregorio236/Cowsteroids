@@ -15,9 +15,7 @@ public:
 
 	void Draw(SpriteRenderer &renderer);
 
-	virtual void ProcessInput(float dt);
-
-private:
+protected:
 	glm::vec2 position;
 	glm::vec2 size;
 	glm::vec2 velocity;

@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "SpriteRenderer.h"
+#include "PlayerObject.h"
 
 enum GameState
 {
@@ -32,6 +33,8 @@ private:
 	int height;
 
 	SpriteRenderer* spriteRenderer;
+
+	PlayerObject* player;
 };
 
 #endif

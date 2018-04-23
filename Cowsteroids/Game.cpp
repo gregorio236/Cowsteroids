@@ -36,11 +36,13 @@ void Game::Initialize()
 	ResourceManager::LoadTexture("../Assets/awesomeface.png", true, "ball");
 
 	spriteRenderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
+
+	player = new PlayerObject(glm::vec2(100.0f, 100.0f), glm::vec2(100.0f, 100.0f), ResourceManager::GetTexture("ball"));
 }
 
 void Game::ProcessInput(float dt)
 {
-
+	player->HandleInput(dt);
 }
 
 void Game::Update(float dt)
@@ -51,4 +53,5 @@ void Game::Update(float dt)
 void Game::Render()
 {
 	spriteRenderer->DrawSprite(ResourceManager::GetTexture("background"), glm::vec2(0.0f, 0.0f), glm::vec2(this->width, this->height));
+	player->Draw(*spriteRenderer);
 }

@@ -26,10 +26,6 @@ GameObject::~GameObject()
 
 void GameObject::Draw(SpriteRenderer & renderer)
 {
+	
 	renderer.DrawSprite(this->sprite, this->position, this->size, this->rotation, this->color);
-}
-
-void GameObject::ProcessInput(float dt)
-{
-
 }
