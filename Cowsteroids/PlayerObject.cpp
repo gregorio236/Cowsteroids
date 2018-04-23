@@ -8,13 +8,11 @@ PlayerObject::PlayerObject(glm::vec2 pos, glm::vec2 size, Texture sprite, glm::v
 {
 	this->position = pos;
 	this->size = size;
-	this->velocity = glm::vec2(0.0f, 0.0f);
 	this->color = color;
 	this->rotation = rotation;
 	this->sprite = sprite;
 	this->speed = 0.0f;
 	this->acceleration = 0.0f;
-	this->maxSpeed = 5.0f;
 }
 
 PlayerObject::~PlayerObject()
@@ -24,53 +22,57 @@ PlayerObject::~PlayerObject()
 
 void PlayerObject::HandleInput(float dt)
 {
+	float accelerationRate = 25.0f;
+	float desacceleration = 10.0f;
+	float maxSpeed = 5.0f;
+	float rotationSpeed = 5.0f;
+
 	if (InputManager::Held(GLFW_KEY_A))
 	{
-		rotation -= dt;
+		this->rotation -= rotationSpeed * dt;
 	}
 	if (InputManager::Held(GLFW_KEY_D))
 	{
-		rotation += dt;
+		this->rotation += rotationSpeed * dt;
 	}
 	if (InputManager::Held(GLFW_KEY_W))
 	{
-		acceleration += dt;
+		this->acceleration += accelerationRate * dt;
 	}
 	if (InputManager::Held(GLFW_KEY_S))
 	{
-		acceleration -= dt;
+		this->acceleration -= accelerationRate * dt;
 	}
 
 	if (!InputManager::Held(GLFW_KEY_W) && !InputManager::Held(GLFW_KEY_S))
 	{
-		acceleration = 0.0f;
-		if (speed > 0.05f)
+		this->acceleration = 0.0f;
+		if (this->speed > 0.05f)
 		{
-			speed -= dt;
+			this->speed -= desacceleration * dt;
 		}
-		else if (speed < -0.05f)
+		else if (this->speed < -0.05f)
 		{
-			speed += dt;
+			this->speed += desacceleration * dt;
 		}
 		else
 		{
-			speed = 0.0f;
+			this->speed = 0.0f;
 		}
 	}
 
-	speed += acceleration;
+	this->speed += this->acceleration;
 
-	if (speed > maxSpeed)
+	if (this->speed > maxSpeed)
 	{
-		speed = maxSpeed;
+		this->speed = maxSpeed;
 	}
-	else if (-speed > maxSpeed)
+	else if (-this->speed > maxSpeed)
 	{
-		speed = -maxSpeed;
+		this->speed = -maxSpeed;
 	}
 
-	glm::vec2 dir(speed * cos(rotation), speed * sin(rotation));
-	std::cout << abs(speed) << std::endl;
+	glm::vec2 dir(this->speed * cos(this->rotation), this->speed * sin(this->rotation));
 
-	position += dir;
+	this->position += dir;
 }

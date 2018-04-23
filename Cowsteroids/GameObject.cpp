@@ -4,16 +4,14 @@ GameObject::GameObject()
 {
 	this->position = glm::vec2(0.0f, 0.0f);
 	this->size = glm::vec2(0.0f, 0.0f);
-	this->velocity = glm::vec2(0.0f, 0.0f);
 	this->color = glm::vec3(1.0f, 1.0f, 1.0f);
 	this->rotation = 0.0f;
 }
 
-GameObject::GameObject(glm::vec2 pos, glm::vec2 size, Texture sprite, glm::vec3 color, float rotation, glm::vec2 velocity)
+GameObject::GameObject(glm::vec2 pos, glm::vec2 size, Texture sprite, glm::vec3 color, float rotation)
 {
 	this->position = pos;
 	this->size = size;
-	this->velocity = velocity;
 	this->color = color;
 	this->rotation = rotation;
 	this->sprite = sprite;
