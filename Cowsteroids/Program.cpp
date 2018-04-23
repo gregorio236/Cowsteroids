@@ -26,8 +26,11 @@ void main()
 	glfwSetKeyCallback(window, keyCallback);
 
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glEnable(GL_DEPTH_TEST);
 
 	cowsteroids = new Game(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -45,12 +48,11 @@ void main()
 
 		glfwPollEvents();
 		InputManager::UpdateKeys();
-		
-		cowsteroids->ProcessInput(deltaTime);
+
 		cowsteroids->Update(deltaTime);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		cowsteroids->Render();
 

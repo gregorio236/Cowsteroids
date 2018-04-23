@@ -20,7 +20,7 @@ PlayerObject::~PlayerObject()
 
 }
 
-void PlayerObject::HandleInput(float dt)
+void PlayerObject::Update(float dt)
 {
 	float accelerationRate = 25.0f;
 	float desacceleration = 10.0f;
@@ -29,50 +29,42 @@ void PlayerObject::HandleInput(float dt)
 
 	if (InputManager::Held(GLFW_KEY_A))
 	{
-		this->rotation -= rotationSpeed * dt;
+		rotation -= rotationSpeed * dt;
 	}
 	if (InputManager::Held(GLFW_KEY_D))
 	{
-		this->rotation += rotationSpeed * dt;
-	}
-	if (InputManager::Held(GLFW_KEY_W))
-	{
-		this->acceleration += accelerationRate * dt;
-	}
-	if (InputManager::Held(GLFW_KEY_S))
-	{
-		this->acceleration -= accelerationRate * dt;
+		rotation += rotationSpeed * dt;
 	}
 
-	if (!InputManager::Held(GLFW_KEY_W) && !InputManager::Held(GLFW_KEY_S))
+	if (InputManager::Held(GLFW_KEY_W))
 	{
-		this->acceleration = 0.0f;
-		if (this->speed > 0.05f)
+		acceleration += accelerationRate * dt;
+	}
+	else
+	{
+		acceleration = 0.0f;
+		if (speed > 0.0f)
 		{
-			this->speed -= desacceleration * dt;
-		}
-		else if (this->speed < -0.05f)
-		{
-			this->speed += desacceleration * dt;
+			speed -= desacceleration * dt;
 		}
 		else
 		{
-			this->speed = 0.0f;
+			speed = 0.0f;
 		}
 	}
 
-	this->speed += this->acceleration;
+	speed += acceleration;
 
-	if (this->speed > maxSpeed)
+	if (speed > maxSpeed)
 	{
-		this->speed = maxSpeed;
+		speed = maxSpeed;
 	}
-	else if (-this->speed > maxSpeed)
+	else if (-speed > maxSpeed)
 	{
-		this->speed = -maxSpeed;
+		speed = -maxSpeed;
 	}
 
-	glm::vec2 dir(this->speed * cos(this->rotation), this->speed * sin(this->rotation));
+	glm::vec2 dir(speed * cos(rotation), speed * sin(rotation));
 
-	this->position += dir;
+	position += dir;
 }

@@ -15,6 +15,8 @@ public:
 
 	void Draw(SpriteRenderer &renderer);
 
+	glm::vec2 GetPos();
+
 protected:
 	glm::vec2 position;
 	glm::vec2 size;

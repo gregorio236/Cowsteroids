@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "Camera.h"
 #include "SpriteRenderer.h"
 #include "PlayerObject.h"
 
@@ -21,20 +22,19 @@ public:
 
 	void Initialize();
 
-	void ProcessInput(float dt);
 	void Update(float dt);
 	void Render();
-
-
 
 private:
 	GameState state;
 	int width;
 	int height;
 
-	SpriteRenderer* spriteRenderer;
+	SpriteRenderer * spriteRenderer;
 
-	PlayerObject* player;
+	PlayerObject * player;
+
+	Camera * camera;
 };
 
 #endif
