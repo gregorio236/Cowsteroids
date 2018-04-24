@@ -11,7 +11,7 @@ public:
 	Camera();
 	~Camera();
 
-	void Update(glm::vec2 center, glm::vec2 size, const char* shader, const char* uniform);
+	void Update(glm::vec2 center, glm::vec2 halfSize, glm::vec2 worldSize, const char* shader, const char* uniform);
 };
 
 #endif

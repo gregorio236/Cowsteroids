@@ -8,7 +8,7 @@
 class PlayerObject : public GameObject
 {
 public:
-	PlayerObject(glm::vec2 pos, glm::vec2 size, Texture sprite, glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f), float rotation = 0.0f);
+	PlayerObject(glm::vec2 pos, glm::vec2 size, Texture sprite, glm::vec2 worldSize);
 	~PlayerObject();
 
 	void Update(float dt);
@@ -16,6 +16,8 @@ public:
 private:
 	float speed;
 	float acceleration;
+
+	glm::vec2 worldSize;
 };
 
 #endif

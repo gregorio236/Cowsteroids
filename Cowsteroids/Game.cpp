@@ -1,24 +1,18 @@
 #include "Game.h"
 
-#include <glm\glm.hpp>
-
 #include "ResourceManager.h"
 
-Game::Game(int width, int height)
+Game::Game(glm::vec2 windowSize)
 {
-	this->width = width;
-	this->height = height;
+	this->windowSize = windowSize;
+	this->worldSize = glm::vec2(2000.0f, 2000.0f);
 }
 
 Game::~Game()
 {
 	delete spriteRenderer;
 	delete player;
-}
-
-void Game::SetState(GameState state)
-{
-	this->state = state;
+	delete camera;
 }
 
 void Game::Initialize()
@@ -32,21 +26,21 @@ void Game::Initialize()
 
 	spriteRenderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 
-	player = new PlayerObject(glm::vec2(100.0f, 100.0f), glm::vec2(32.0f, 32.0f), ResourceManager::GetTexture("ship"));
+	player = new PlayerObject(glm::vec2(100.0f, 100.0f), glm::vec2(32.0f, 32.0f), ResourceManager::GetTexture("ship"), this->worldSize);
 
 	camera = new Camera();
 
-	camera->Update(player->GetPos(), glm::vec2(this->width, this->height), "sprite", "projection");
+	camera->Update(player->GetPos(), this->windowSize * 0.5f, this->worldSize, "sprite", "projection");
 }
 
 void Game::Update(float dt)
 {
 	player->Update(dt);
-	camera->Update(player->GetPos(), glm::vec2(this->width, this->height), "sprite", "projection");
+	camera->Update(player->GetPos(), this->windowSize * 0.5f, this->worldSize, "sprite", "projection");
 }
 
 void Game::Render()
 {
 	player->Draw(*spriteRenderer);
-	spriteRenderer->DrawSprite(ResourceManager::GetTexture("background"), glm::vec2(0.0f, 0.0f), glm::vec2(2000.0f, 2000.0f));
+	spriteRenderer->DrawSprite(ResourceManager::GetTexture("background"), glm::vec2(0.0f, 0.0f), this->worldSize);
 }

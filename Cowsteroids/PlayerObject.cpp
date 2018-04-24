@@ -4,15 +4,16 @@
 #include <iostream>
 #include "InputManager.h"
 
-PlayerObject::PlayerObject(glm::vec2 pos, glm::vec2 size, Texture sprite, glm::vec3 color, float rotation)
+PlayerObject::PlayerObject(glm::vec2 pos, glm::vec2 size, Texture sprite, glm::vec2 worldSize)
 {
 	this->position = pos;
 	this->size = size;
-	this->color = color;
-	this->rotation = rotation;
+	this->color = glm::vec3(1.0f,1.0f,1.0f);
+	this->rotation = 0.0f;
 	this->sprite = sprite;
 	this->speed = 0.0f;
 	this->acceleration = 0.0f;
+	this->worldSize = worldSize;
 }
 
 PlayerObject::~PlayerObject()
@@ -67,4 +68,22 @@ void PlayerObject::Update(float dt)
 	glm::vec2 dir(speed * cos(rotation), speed * sin(rotation));
 
 	position += dir;
+
+	if (position.x < 0.0f)
+	{
+		position.x = 0.0f;
+	}
+	else if (position.x + size.x > worldSize.x)
+	{
+		position.x = worldSize.x - size.x;
+	}
+
+	if (position.y < 0.0f)
+	{
+		position.y = 0.0f;
+	}
+	else if (position.y + size.y > worldSize.y)
+	{
+		position.y = worldSize.y - size.y;
+	}
 }

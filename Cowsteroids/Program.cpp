@@ -32,10 +32,9 @@ void main()
 
 	glEnable(GL_DEPTH_TEST);
 
-	cowsteroids = new Game(SCREEN_WIDTH, SCREEN_HEIGHT);
+	cowsteroids = new Game({ SCREEN_WIDTH, SCREEN_HEIGHT });
 
 	cowsteroids->Initialize();
-	cowsteroids->SetState(GameState::ACTIVE);
 
 	float deltaTime = 0.0f;
 	float lastFrame = 0.0f;

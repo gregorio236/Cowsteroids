@@ -1,24 +1,17 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <glm\glm.hpp>
+
 #include "Camera.h"
 #include "SpriteRenderer.h"
 #include "PlayerObject.h"
 
-enum GameState
-{
-	ACTIVE,
-	MENU,
-	WIN
-};
-
 class Game
 {
 public:
-	Game(int width, int height);
+	Game(glm::vec2 windowSize);
 	~Game();
-
-	void SetState(GameState state);
 
 	void Initialize();
 
@@ -26,9 +19,8 @@ public:
 	void Render();
 
 private:
-	GameState state;
-	int width;
-	int height;
+	glm::vec2 windowSize;
+	glm::vec2 worldSize;
 
 	SpriteRenderer * spriteRenderer;
 
