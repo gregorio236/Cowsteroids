@@ -8,12 +8,14 @@ PlayerObject::PlayerObject(glm::vec2 pos, glm::vec2 size, Texture sprite, glm::v
 {
 	this->position = pos;
 	this->size = size;
-	this->color = glm::vec3(1.0f,1.0f,1.0f);
+	this->color = glm::vec3(1.0f, 1.0f, 1.0f);
 	this->rotation = 0.0f;
 	this->sprite = sprite;
 	this->speed = 0.0f;
 	this->acceleration = 0.0f;
 	this->worldSize = worldSize;
+	this->COM = glm::vec2(0.375f * this->size.x, 0.5 * this->size.y);
+	this->radius = 0.3671875f * this->size.x;
 }
 
 PlayerObject::~PlayerObject()

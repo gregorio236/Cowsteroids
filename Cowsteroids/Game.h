@@ -27,6 +27,8 @@ private:
 	PlayerObject * player;
 
 	Camera * camera;
+
+	bool Collision(GameObject * obj1, GameObject * obj2);
 };
 
 #endif

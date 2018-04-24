@@ -44,3 +44,9 @@ void Game::Render()
 	player->Draw(*spriteRenderer);
 	spriteRenderer->DrawSprite(ResourceManager::GetTexture("background"), glm::vec2(0.0f, 0.0f), this->worldSize);
 }
+
+bool Game::Collision(GameObject * obj1, GameObject * obj2)
+{
+	//glm::vec2 pos1(obj1->)
+	return false;
+}

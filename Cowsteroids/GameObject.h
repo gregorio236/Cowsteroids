@@ -10,12 +10,13 @@ class GameObject
 {
 public:
 	GameObject();
-	GameObject(glm::vec2 pos, glm::vec2 size, Texture sprite, glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f), float rotation = 0.0f);
 	~GameObject();
 
 	void Draw(SpriteRenderer &renderer);
 
 	glm::vec2 GetPos();
+	glm::vec2 GetCOM();
+	float GetRadius();
 
 protected:
 	glm::vec2 position;
@@ -24,6 +25,9 @@ protected:
 	float rotation;
 
 	Texture sprite;
+
+	glm::vec2 COM;
+	float radius;
 };
 
 #endif
