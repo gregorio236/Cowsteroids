@@ -1,7 +1,8 @@
 #ifndef GAME_OBJECT_H
 #define GAME_OBJECT_H
 
-#include <glm\glm.hpp>
+#include <glm\vec2.hpp>
+#include <glm\vec3.hpp>
 
 #include "SpriteRenderer.h"
 #include "Texture.h"
@@ -12,11 +13,13 @@ public:
 	GameObject();
 	~GameObject();
 
-	void Draw(SpriteRenderer &renderer);
-
 	glm::vec2 GetPos();
+	void SetPos(glm::vec2 pos);
+	glm::vec2 GetSize();
 	glm::vec2 GetCOM();
 	float GetRadius();
+
+	void Draw(SpriteRenderer &renderer);
 
 protected:
 	glm::vec2 position;

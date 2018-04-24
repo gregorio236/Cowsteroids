@@ -1,11 +1,13 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <glm\glm.hpp>
+#include <glm\vec2.hpp>
+#include <vector>
 
 #include "Camera.h"
 #include "SpriteRenderer.h"
 #include "PlayerObject.h"
+#include "CowObject.h"
 
 class Game
 {
@@ -15,20 +17,22 @@ public:
 
 	void Initialize();
 
+	void HandleInput(float dt);
 	void Update(float dt);
+	void Collisions();
 	void Render();
 
 private:
+	std::vector<CowObject *> cows;
 	glm::vec2 windowSize;
 	glm::vec2 worldSize;
 
 	SpriteRenderer * spriteRenderer;
-
 	PlayerObject * player;
-
 	Camera * camera;
 
-	bool Collision(GameObject * obj1, GameObject * obj2);
+	void PlayerCollisions();
+	void CowCollisions();
 };
 
 #endif

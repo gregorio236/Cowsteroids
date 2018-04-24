@@ -1,23 +1,31 @@
 #ifndef PLAYER_OBJECT_H
 #define PLAYER_OBJECT_H
 
-#include <glm\glm.hpp>
+#include <glm\vec2.hpp>
+#include <glm\vec3.hpp>
 
 #include "GameObject.h"
 
 class PlayerObject : public GameObject
 {
 public:
-	PlayerObject(glm::vec2 pos, glm::vec2 size, Texture sprite, glm::vec2 worldSize);
+	PlayerObject(glm::vec2 pos, Texture sprite);
 	~PlayerObject();
 
 	void Update(float dt);
 
+	void RotateCW(float dt);
+	void RotateCCW(float dt);
+	void Move(float dt);
+	void Stop(float dt);
+
 private:
 	float speed;
 	float acceleration;
-
-	glm::vec2 worldSize;
+	float accelerationRate;
+	float desacceleration;
+	float maxSpeed;
+	float rotationSpeed;
 };
 
 #endif
