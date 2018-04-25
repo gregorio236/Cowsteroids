@@ -1,8 +1,11 @@
 #include "Game.h"
 #define _USE_MATH_DEFINES
+
 #include <math.h>
 #include <GLFW\glfw3.h>
 #include <iostream>
+#include <random>
+#include <time.h>
 
 #include "InputManager.h"
 #include "ResourceManager.h"
@@ -46,6 +49,17 @@ void Game::Initialize()
 	camera = new Camera();
 
 	camera->Update(player->GetPos(), this->windowSize * 0.5f, this->worldSize, "sprite", "projection");
+
+	srand(time(NULL));
+
+	for (int i = 0; i < 10; i++)
+	{
+		float x = (rand() % ((int)this->worldSize.x - 200)) + 100;
+		float y = (rand() % ((int)this->worldSize.y - 200)) + 100;
+		float ang = rand() % 360;
+		cows.push_back(new CowObject(glm::vec2(x, y), ResourceManager::GetTexture("cow"), (ang * M_PI) / 180, 4));
+	}
+
 
 	cows.push_back(new CowObject(glm::vec2(300.0f, 200.0f), ResourceManager::GetTexture("cow"), (65 * M_PI) / 180, 4));
 }
