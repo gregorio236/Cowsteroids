@@ -9,6 +9,7 @@
 #include "PlayerObject.h"
 #include "CowObject.h"
 #include "ShotObject.h"
+#include "Layer.h"
 
 class Game
 {
@@ -28,6 +29,7 @@ private:
 	std::vector<ShotObject *>shots;
 	glm::vec2 windowSize;
 	glm::vec2 worldSize;
+	std::vector<Layer *> layers;
 
 	SpriteRenderer * spriteRenderer;
 	PlayerObject * player;

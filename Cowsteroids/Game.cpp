@@ -14,7 +14,7 @@
 Game::Game(glm::vec2 windowSize)
 {
 	this->windowSize = windowSize;
-	this->worldSize = glm::vec2(2000.0f, 2000.0f);
+	this->worldSize = glm::vec2(1920.0f, 1080.0f);
 }
 
 Game::~Game()
@@ -37,10 +37,14 @@ void Game::Initialize()
 	ResourceManager::LoadShader("../Shaders/vert.GLSL", "../Shaders/frag.GLSL", "sprite");
 	ResourceManager::GetShader("sprite").Use().SetUniform("image", 0);
 
-	ResourceManager::LoadTexture("../Assets/background.jpg", false, "background");
+	ResourceManager::LoadTexture("../Assets/stars.png", true, "stars");
 	ResourceManager::LoadTexture("../Assets/cow.png", true, "cow");
 	ResourceManager::LoadTexture("../Assets/ship.png", true, "ship");
 	ResourceManager::LoadTexture("../Assets/shot.png", true, "shot");
+	ResourceManager::LoadTexture("../Assets/planet1.png", true, "planet1");
+	ResourceManager::LoadTexture("../Assets/planet2.png", true, "planet2");
+	ResourceManager::LoadTexture("../Assets/sun.png", true, "sun");
+	ResourceManager::LoadTexture("../Assets/wall.png", true, "wall");
 
 	spriteRenderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 
@@ -59,6 +63,13 @@ void Game::Initialize()
 		int ang = rand() % 360;
 		cows.push_back(new CowObject(glm::vec2(x, y), ResourceManager::GetTexture("cow"), (ang * M_PI) / 180, 4));
 	}
+
+	layers.push_back(new Layer(ResourceManager::GetTexture("wall"), glm::vec2(-10.0f, -10.0f), glm::vec2(1940.0f, 1100.0f), 0, 0.0f, this->worldSize*0.5f));
+	layers.push_back(new Layer(ResourceManager::GetTexture("planet1"), glm::vec2(100.0f, 100.0f), glm::vec2(150.0f, 150.0f), -1, 0.1f, this->worldSize*0.5f));
+	layers.push_back(new Layer(ResourceManager::GetTexture("planet2"), glm::vec2(1500.0f, 700.0f), glm::vec2(500.0f, 500.0f), -1, 0.2f, this->worldSize*0.5f));
+	glm::vec2 sunSize = glm::vec2(50.0f, 50.0f);
+	layers.push_back(new Layer(ResourceManager::GetTexture("sun"), ((this->worldSize - sunSize)*0.5f), sunSize, -98, 0.9f, this->worldSize*0.5f));
+	layers.push_back(new Layer(ResourceManager::GetTexture("stars"), glm::vec2(0.0f, 0.0f), this->worldSize, -99, 1.0f, this->worldSize*0.5f));
 }
 
 void Game::HandleInput(float dt)
@@ -114,19 +125,22 @@ void Game::Collisions()
 
 void Game::Render()
 {
-	player->Draw(*spriteRenderer);
+	player->Draw(*spriteRenderer, 3);
 
 	for (ShotObject * shot : shots)
 	{
-		shot->Draw(*spriteRenderer);
+		shot->Draw(*spriteRenderer, 2);
 	}
 
 	for (CowObject * cow : cows)
 	{
-		cow->Draw(*spriteRenderer);
+		cow->Draw(*spriteRenderer, 1);
 	}
 
-	spriteRenderer->DrawSprite(ResourceManager::GetTexture("background"), glm::vec2(0.0f, 0.0f), this->worldSize);
+	for (Layer * layer : layers)
+	{
+		layer->Draw(*spriteRenderer, player->GetPos() + player->GetCOM());
+	}
 }
 
 void Game::PlayerCollisions()
@@ -167,20 +181,24 @@ void Game::CowCollisions()
 
 		if (collision[COL_LEFT])
 		{
-			cow->SetPos(glm::vec2(this->worldSize.x - cow->GetSize().x, cow->GetPos().y));
+			cow->direction.x *= -1;
+			//cow->SetPos(glm::vec2(this->worldSize.x - cow->GetSize().x, cow->GetPos().y));
 		}
 		else if (collision[COL_RIGHT])
 		{
-			cow->SetPos(glm::vec2(0.0f, cow->GetPos().y));
+			cow->direction.x *= -1;
+			//cow->SetPos(glm::vec2(0.0f, cow->GetPos().y));
 		}
 
 		if (collision[COL_TOP])
 		{
-			cow->SetPos(glm::vec2(cow->GetPos().x, this->worldSize.y - cow->GetSize().y));
+			cow->direction.y *= -1;
+			//cow->SetPos(glm::vec2(cow->GetPos().x, this->worldSize.y - cow->GetSize().y));
 		}
 		else if (collision[COL_DOWM])
 		{
-			cow->SetPos(glm::vec2(cow->GetPos().x, 0.0f));
+			cow->direction.y *= -1;
+			//cow->SetPos(glm::vec2(cow->GetPos().x, 0.0f));
 		}
 
 		for (int j = 0; j < shots.size(); j++)
@@ -192,8 +210,8 @@ void Game::CowCollisions()
 				int tier = cow->GetTier();
 				if (tier > 1)
 				{
-					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), shot->GetRotation() - 1, tier - 1));
-					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), shot->GetRotation() + 1, tier - 1));
+					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), cow->GetRotation() - 1, tier - 1));
+					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), cow->GetRotation() + 1, tier - 1));
 				}
 
 				delete shot;

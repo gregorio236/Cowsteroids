@@ -13,8 +13,8 @@ public:
 
 	void Update(float dt);
 
-private:
 	glm::vec2 direction;
+private:
 	float speed;
 	int tier;
 };
