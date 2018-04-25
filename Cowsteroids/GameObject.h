@@ -13,6 +13,7 @@ public:
 	GameObject();
 	~GameObject();
 
+	float GetRotation();
 	glm::vec2 GetPos();
 	void SetPos(glm::vec2 pos);
 	glm::vec2 GetSize();

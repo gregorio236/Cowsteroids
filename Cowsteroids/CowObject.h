@@ -9,9 +9,12 @@ public:
 	CowObject(glm::vec2 pos, Texture sprite, float rotation, int tier);
 	~CowObject();
 
+	int GetTier();
+
 	void Update(float dt);
 
 private:
+	glm::vec2 direction;
 	float speed;
 	int tier;
 };

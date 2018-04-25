@@ -130,6 +130,7 @@
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShotObject.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
@@ -143,6 +144,7 @@
     <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShotObject.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>

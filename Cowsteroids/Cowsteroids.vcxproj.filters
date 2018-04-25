@@ -54,6 +54,9 @@
     <ClCompile Include="CowObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ShotObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -87,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CowObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShotObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

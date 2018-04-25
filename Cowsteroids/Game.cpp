@@ -2,6 +2,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <GLFW\glfw3.h>
+#include <iostream>
 
 #include "InputManager.h"
 #include "ResourceManager.h"
@@ -18,6 +19,14 @@ Game::~Game()
 	delete spriteRenderer;
 	delete player;
 	delete camera;
+	for (CowObject * cow : cows)
+	{
+		delete cow;
+	}
+	for (ShotObject * shot : shots)
+	{
+		delete shot;
+	}
 }
 
 void Game::Initialize()
@@ -28,6 +37,7 @@ void Game::Initialize()
 	ResourceManager::LoadTexture("../Assets/background.jpg", false, "background");
 	ResourceManager::LoadTexture("../Assets/cow.png", true, "cow");
 	ResourceManager::LoadTexture("../Assets/ship.png", true, "ship");
+	ResourceManager::LoadTexture("../Assets/shot.png", true, "shot");
 
 	spriteRenderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 
@@ -59,13 +69,25 @@ void Game::HandleInput(float dt)
 	{
 		player->Stop(dt);
 	}
+
+	if (InputManager::Pressed(GLFW_KEY_SPACE))
+	{
+		glm::vec2 pos = player->GetPos() + player->GetSize()*0.5f;
+		float rot = player->GetRotation();
+		shots.push_back(new ShotObject(pos, ResourceManager::GetTexture("shot"), rot));
+	}
 }
 
 void Game::Update(float dt)
 {
-	for (CowObject * c : cows)
+	for (CowObject * cow : cows)
 	{
-		c->Update(dt);
+		cow->Update(dt);
+	}
+
+	for (ShotObject * shot : shots)
+	{
+		shot->Update(dt);
 	}
 
 	player->Update(dt);
@@ -76,15 +98,21 @@ void Game::Collisions()
 {
 	PlayerCollisions();
 	CowCollisions();
+	ShotCollisions();
 }
 
 void Game::Render()
 {
 	player->Draw(*spriteRenderer);
 
-	for (CowObject * c : cows)
+	for (ShotObject * shot : shots)
 	{
-		c->Draw(*spriteRenderer);
+		shot->Draw(*spriteRenderer);
+	}
+
+	for (CowObject * cow : cows)
+	{
+		cow->Draw(*spriteRenderer);
 	}
 
 	spriteRenderer->DrawSprite(ResourceManager::GetTexture("background"), glm::vec2(0.0f, 0.0f), this->worldSize);
@@ -111,12 +139,19 @@ void Game::PlayerCollisions()
 	{
 		player->SetPos(glm::vec2(player->GetPos().x, this->worldSize.y - player->GetSize().y));
 	}
+
+	if (CollisionManager::Colided(player, cows[0]))
+	{
+
+	}
 }
 
 void Game::CowCollisions()
 {
-	for (CowObject * cow : cows)
+	for (int i = 0; i < cows.size(); i++)
 	{
+		CowObject * cow = cows[i];
+
 		bool * collision = CollisionManager::Colided(cow, this->worldSize);
 
 		if (collision[COL_LEFT])
@@ -137,6 +172,46 @@ void Game::CowCollisions()
 		else if (collision[COL_DOWM])
 		{
 			cow->SetPos(glm::vec2(cow->GetPos().x, 0.0f));
+		}
+
+		for (int j = 0; j < shots.size(); j++)
+		{
+			ShotObject * shot = shots[j];
+
+			if (CollisionManager::Colided(cow, shot))
+			{
+				delete shot;
+				shots.erase(shots.begin() + j);
+
+				int tier = cow->GetTier();
+				if (tier > 1)
+				{
+					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), cow->GetRotation() - 1, tier - 1));
+					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), cow->GetRotation() + 1, tier - 1));
+				}
+				delete cow;
+				cows.erase(cows.begin() + i);
+				i--;
+
+				break;
+			}
+		}
+	}
+}
+
+void Game::ShotCollisions()
+{
+	for (int i = 0; i < shots.size(); i++)
+	{
+		ShotObject * shot = shots[i];
+
+		bool * collision = CollisionManager::Colided(shot, this->worldSize);
+
+		if (collision[COL_LEFT] || collision[COL_RIGHT] || collision[COL_TOP] || collision[COL_DOWM])
+		{
+			delete shot;
+			shots.erase(shots.begin() + i);
+			i--;
 		}
 	}
 }

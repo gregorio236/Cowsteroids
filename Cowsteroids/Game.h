@@ -8,6 +8,7 @@
 #include "SpriteRenderer.h"
 #include "PlayerObject.h"
 #include "CowObject.h"
+#include "ShotObject.h"
 
 class Game
 {
@@ -24,6 +25,7 @@ public:
 
 private:
 	std::vector<CowObject *> cows;
+	std::vector<ShotObject *>shots;
 	glm::vec2 windowSize;
 	glm::vec2 worldSize;
 
@@ -33,6 +35,7 @@ private:
 
 	void PlayerCollisions();
 	void CowCollisions();
+	void ShotCollisions();
 };
 
 #endif

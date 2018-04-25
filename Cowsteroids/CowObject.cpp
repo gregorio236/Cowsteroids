@@ -8,9 +8,10 @@ CowObject::CowObject(glm::vec2 pos, Texture sprite, float rotation, int tier)
 	this->color = glm::vec3(1.0f, 1.0f, 1.0f);
 	this->rotation = rotation;
 	this->sprite = sprite;
-	this->COM = glm::vec2(0.375f * this->size.x, 0.5 * this->size.y);
-	this->radius = 0.3671875f * this->size.x;
+	this->COM = glm::vec2(0.4921875f * this->size.x, 0.5f * this->size.y);
+	this->radius = 0.4453125f * this->size.x;
 	this->speed = 3.0f / tier;
+	this->direction = glm::vec2(speed * cos(rotation), speed * sin(rotation));
 }
 
 CowObject::~CowObject()
@@ -18,8 +19,12 @@ CowObject::~CowObject()
 
 }
 
+int CowObject::GetTier()
+{
+	return this->tier;
+}
+
 void CowObject::Update(float dt)
 {
-	glm::vec2 direction(speed * cos(rotation), speed * sin(rotation));
 	position += direction;
 }
