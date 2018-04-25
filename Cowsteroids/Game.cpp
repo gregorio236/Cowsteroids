@@ -43,6 +43,7 @@ void Game::Initialize()
 	ResourceManager::LoadTexture("../Assets/shot.png", true, "shot");
 	ResourceManager::LoadTexture("../Assets/planet1.png", true, "planet1");
 	ResourceManager::LoadTexture("../Assets/planet2.png", true, "planet2");
+	ResourceManager::LoadTexture("../Assets/planet3.png", true, "planet3");
 	ResourceManager::LoadTexture("../Assets/sun.png", true, "sun");
 	ResourceManager::LoadTexture("../Assets/wall.png", true, "wall");
 
@@ -64,9 +65,18 @@ void Game::Initialize()
 		cows.push_back(new CowObject(glm::vec2(x, y), ResourceManager::GetTexture("cow"), (ang * M_PI) / 180, 4));
 	}
 
+
 	layers.push_back(new Layer(ResourceManager::GetTexture("wall"), glm::vec2(-10.0f, -10.0f), glm::vec2(1940.0f, 1100.0f), 0, 0.0f, this->worldSize*0.5f));
-	layers.push_back(new Layer(ResourceManager::GetTexture("planet1"), glm::vec2(100.0f, 100.0f), glm::vec2(150.0f, 150.0f), -1, 0.1f, this->worldSize*0.5f));
-	layers.push_back(new Layer(ResourceManager::GetTexture("planet2"), glm::vec2(1500.0f, 700.0f), glm::vec2(500.0f, 500.0f), -1, 0.2f, this->worldSize*0.5f));
+
+	float x = (rand() % ((int)this->worldSize.x - 200)) + 100;
+	float y = (rand() % ((int)this->worldSize.y - 200)) + 100;
+	layers.push_back(new Layer(ResourceManager::GetTexture("planet1"), glm::vec2(x, y), glm::vec2(150.0f, 150.0f), -3, 0.1f, this->worldSize*0.5f));
+	x = (rand() % ((int)this->worldSize.x - 200)) + 100;
+	y = (rand() % ((int)this->worldSize.y - 200)) + 100;
+	layers.push_back(new Layer(ResourceManager::GetTexture("planet2"), glm::vec2(x, y), glm::vec2(500.0f, 500.0f), -1, 0.3f, this->worldSize*0.5f));
+	x = (rand() % ((int)this->worldSize.x - 200)) + 100;
+	y = (rand() % ((int)this->worldSize.y - 200)) + 100;
+	layers.push_back(new Layer(ResourceManager::GetTexture("planet3"), glm::vec2(x, y), glm::vec2(300.0f, 300.0f), -2, 0.2f, this->worldSize*0.5f));
 	glm::vec2 sunSize = glm::vec2(50.0f, 50.0f);
 	layers.push_back(new Layer(ResourceManager::GetTexture("sun"), ((this->worldSize - sunSize)*0.5f), sunSize, -98, 0.9f, this->worldSize*0.5f));
 	layers.push_back(new Layer(ResourceManager::GetTexture("stars"), glm::vec2(0.0f, 0.0f), this->worldSize, -99, 1.0f, this->worldSize*0.5f));
