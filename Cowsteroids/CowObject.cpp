@@ -26,5 +26,5 @@ int CowObject::GetTier()
 
 void CowObject::Update(float dt)
 {
-	position += direction;
+	this->position += this->direction;
 }

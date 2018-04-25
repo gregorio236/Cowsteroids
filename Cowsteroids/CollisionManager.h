@@ -5,6 +5,7 @@
 
 #include "GameObject.h"
 
+//Define os lados da colisao com o mundo
 enum WorldCollison
 {
 	COL_LEFT,
@@ -16,7 +17,9 @@ enum WorldCollison
 class CollisionManager
 {
 public:
+	//Colisao entre dois objetos
 	static bool Colided(GameObject * obj1, GameObject * obj2);
+	//"Colisao" com as bordas do mundo
 	static bool * Colided(GameObject * obj, glm::vec2 worldSize);
 };
 

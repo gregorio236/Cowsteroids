@@ -37,10 +37,10 @@ glm::vec2 GameObject::GetSize()
 
 glm::vec2 GameObject::GetCOM()
 {
-	return COM;
+	return this->COM;
 }
 
 float GameObject::GetRadius()
 {
-	return radius;
+	return this->radius;
 }

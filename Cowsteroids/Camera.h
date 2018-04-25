@@ -11,6 +11,7 @@ public:
 	Camera();
 	~Camera();
 
+	//Atualiza a posicao da camera
 	void Update(glm::vec2 center, glm::vec2 halfSize, glm::vec2 worldSize, const char* shader, const char* uniform);
 };
 

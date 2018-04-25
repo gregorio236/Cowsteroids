@@ -44,7 +44,7 @@ void Game::Initialize()
 
 	spriteRenderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 
-	player = new PlayerObject(glm::vec2(100.0f, 100.0f), ResourceManager::GetTexture("ship"));
+	player = new PlayerObject(glm::vec2(this->worldSize.x / 2, this->worldSize.y / 2), ResourceManager::GetTexture("ship"));
 
 	camera = new Camera();
 
@@ -56,12 +56,9 @@ void Game::Initialize()
 	{
 		float x = (rand() % ((int)this->worldSize.x - 200)) + 100;
 		float y = (rand() % ((int)this->worldSize.y - 200)) + 100;
-		float ang = rand() % 360;
+		int ang = rand() % 360;
 		cows.push_back(new CowObject(glm::vec2(x, y), ResourceManager::GetTexture("cow"), (ang * M_PI) / 180, 4));
 	}
-
-
-	cows.push_back(new CowObject(glm::vec2(300.0f, 200.0f), ResourceManager::GetTexture("cow"), (65 * M_PI) / 180, 4));
 }
 
 void Game::HandleInput(float dt)
@@ -175,13 +172,11 @@ void Game::CowCollisions()
 		else if (collision[COL_RIGHT])
 		{
 			cow->SetPos(glm::vec2(0.0f, cow->GetPos().y));
-
 		}
 
 		if (collision[COL_TOP])
 		{
 			cow->SetPos(glm::vec2(cow->GetPos().x, this->worldSize.y - cow->GetSize().y));
-
 		}
 		else if (collision[COL_DOWM])
 		{
@@ -194,15 +189,16 @@ void Game::CowCollisions()
 
 			if (CollisionManager::Colided(cow, shot))
 			{
-				delete shot;
-				shots.erase(shots.begin() + j);
-
 				int tier = cow->GetTier();
 				if (tier > 1)
 				{
-					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), cow->GetRotation() - 1, tier - 1));
-					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), cow->GetRotation() + 1, tier - 1));
+					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), shot->GetRotation() - 1, tier - 1));
+					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), shot->GetRotation() + 1, tier - 1));
 				}
+
+				delete shot;
+				shots.erase(shots.begin() + j);
+
 				delete cow;
 				cows.erase(cows.begin() + i);
 				i--;

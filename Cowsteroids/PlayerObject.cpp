@@ -34,10 +34,6 @@ void PlayerObject::Update(float dt)
 	{
 		speed = maxSpeed;
 	}
-	else if (-speed > maxSpeed)
-	{
-		speed = -maxSpeed;
-	}
 
 	glm::vec2 dir(speed * cos(rotation), speed * sin(rotation));
 
