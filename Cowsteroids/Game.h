@@ -45,6 +45,8 @@ private:
 	void PlayerCollisions();
 	void CowCollisions();
 	void ShotCollisions();
+
+	CowObject * SpawnCow(bool avoidCenter = false);
 };
 
 #endif

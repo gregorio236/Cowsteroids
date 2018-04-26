@@ -66,19 +66,7 @@ void Game::Initialize()
 
 	for (int i = 0; i < 10; i++)
 	{
-		float x = (rand() % ((int)this->worldSize.x - 400)) + 200;
-		while (x < player->GetPos().x + 200 && x > player->GetPos().x - 200)
-		{
-			x = (rand() % ((int)this->worldSize.x - 400)) + 200;
-		}
-
-		float y = (rand() % ((int)this->worldSize.y - 400)) + 200;
-		while (y < player->GetPos().y + 200 && x > player->GetPos().y - 200)
-		{
-			y = (rand() % ((int)this->worldSize.y - 400)) + 200;
-		}
-		int ang = rand() % 360;
-		cows.push_back(new CowObject(glm::vec2(x, y), ResourceManager::GetTexture("cow"), (ang * M_PI) / 180, 4));
+		cows.push_back(this->SpawnCow(true));
 	}
 
 	layers.push_back(new Layer(ResourceManager::GetTexture("wall"), glm::vec2(-10.0f, -10.0f), glm::vec2(1940.0f, 1100.0f), 1.0f, 0.0f, this->worldSize*0.5f));
@@ -253,23 +241,19 @@ void Game::CowCollisions()
 		if (collision[COL_LEFT])
 		{
 			cow->direction.x *= -1;
-			//cow->SetPos(glm::vec2(this->worldSize.x - cow->GetSize().x, cow->GetPos().y));
 		}
 		else if (collision[COL_RIGHT])
 		{
 			cow->direction.x *= -1;
-			//cow->SetPos(glm::vec2(0.0f, cow->GetPos().y));
 		}
 
 		if (collision[COL_TOP])
 		{
 			cow->direction.y *= -1;
-			//cow->SetPos(glm::vec2(cow->GetPos().x, this->worldSize.y - cow->GetSize().y));
 		}
 		else if (collision[COL_DOWM])
 		{
 			cow->direction.y *= -1;
-			//cow->SetPos(glm::vec2(cow->GetPos().x, 0.0f));
 		}
 
 		for (int j = 0; j < shots.size(); j++)
@@ -319,4 +303,35 @@ void Game::ShotCollisions()
 			i--;
 		}
 	}
+}
+
+CowObject * Game::SpawnCow(bool avoidCenter)
+{
+	CowObject * cow;
+	float x;
+	float y;
+
+	x = (rand() % ((int)this->worldSize.x - 400)) + 200;
+	if (avoidCenter)
+	{
+		while (x < player->GetPos().x + 200 && x > player->GetPos().x - 200)
+		{
+			x = (rand() % ((int)this->worldSize.x - 400)) + 200;
+		}
+	}
+
+	y = (rand() % ((int)this->worldSize.y - 400)) + 200;
+	if (avoidCenter)
+	{
+		while (y < player->GetPos().y + 200 && x > player->GetPos().y - 200)
+		{
+			y = (rand() % ((int)this->worldSize.y - 400)) + 200;
+		}
+	}
+
+	int ang = rand() % 360;
+
+	cow = new CowObject(glm::vec2(x, y), ResourceManager::GetTexture("cow"), (ang * M_PI) / 180, 4);
+
+	return cow;
 }

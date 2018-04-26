@@ -45,10 +45,11 @@ std::vector<Score> ResourceManager::GetScoreBoard(const char * path)
 	}
 	else
 	{
-		char a, b, c;
-		int score;
 		for (int i = 0; i < 10; i++)
 		{
+			char a, b, c;
+			int score;
+
 			file.read((char*)&a, sizeof(char));
 			file.read((char*)&b, sizeof(char));
 			file.read((char*)&c, sizeof(char));
