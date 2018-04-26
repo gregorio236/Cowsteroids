@@ -58,9 +58,16 @@ void main()
 		cowsteroids->Render();
 
 		glfwSwapBuffers(window);
+
+		if (cowsteroids->GetIsOver())
+		{
+			glfwSetWindowShouldClose(window, true);
+		}
 	}
 
 	glfwTerminate();
+
+	cowsteroids->ShowScoreboard();
 
 	delete cowsteroids;
 }

@@ -16,6 +16,8 @@ Game::Game(glm::vec2 windowSize)
 	this->windowSize = windowSize;
 	this->worldSize = glm::vec2(1920.0f, 1080.0f);
 	this->isOver = false;
+	this->score = 0;
+	std::cout << "Score: " << score << std::endl;
 }
 
 Game::~Game()
@@ -76,7 +78,6 @@ void Game::Initialize()
 			y = (rand() % ((int)this->worldSize.y - 400)) + 200;
 		}
 		int ang = rand() % 360;
-		std::cout << x << " - " << y << std::endl;
 		cows.push_back(new CowObject(glm::vec2(x, y), ResourceManager::GetTexture("cow"), (ang * M_PI) / 180, 4));
 	}
 
@@ -98,16 +99,16 @@ void Game::Initialize()
 
 void Game::HandleInput(float dt)
 {
-	if (InputManager::Held(GLFW_KEY_A))
+	if (InputManager::Held(GLFW_KEY_A) || InputManager::Held(GLFW_KEY_LEFT))
 	{
 		player->RotateCCW(dt);
 	}
-	if (InputManager::Held(GLFW_KEY_D))
+	if (InputManager::Held(GLFW_KEY_D) || InputManager::Held(GLFW_KEY_RIGHT))
 	{
 		player->RotateCW(dt);
 	}
 
-	if (InputManager::Held(GLFW_KEY_W))
+	if (InputManager::Held(GLFW_KEY_W) || InputManager::Held(GLFW_KEY_UP))
 	{
 		player->Move(dt);
 	}
@@ -167,9 +168,47 @@ void Game::Render()
 	}
 }
 
-bool Game::IsOver()
+bool Game::GetIsOver()
 {
 	return this->isOver;
+}
+
+void Game::ShowScoreboard()
+{
+	system("cls");
+	int score = this->score;
+	std::cout << "Score: " << score << std::endl;
+
+	std::cout << "Type your name: ";
+	std::string name;
+	std::cin >> name;
+
+	std::vector<Score> scoreboard = ResourceManager::GetScoreBoard("../Files/scoreboard.dat");
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (score > scoreboard[i].score)
+		{
+			std::string tempName = scoreboard[i].name;
+			int tempScore = scoreboard[i].score;
+
+			scoreboard[i].name = name;
+			scoreboard[i].score = score;
+
+			name = tempName;
+			score = tempScore;
+		}
+	}
+
+	system("cls");
+
+	std::cout << "Scoreboard" << std::endl;
+	for (Score s : scoreboard)
+	{
+		std::cout << s.name << " - " << s.score << std::endl;
+	}
+	system("pause");
+	ResourceManager::SetScoreBoard("../Files/scoreboard.dat", scoreboard);
 }
 
 void Game::PlayerCollisions()
@@ -198,10 +237,9 @@ void Game::PlayerCollisions()
 	{
 		if (CollisionManager::Colided(player, cow))
 		{
-			//std::cout << "Colidiu" << std::endl;
+			this->isOver = true;
 		}
 	}
-
 }
 
 void Game::CowCollisions()
@@ -241,6 +279,12 @@ void Game::CowCollisions()
 			if (CollisionManager::Colided(cow, shot))
 			{
 				int tier = cow->GetTier();
+
+				this->score += 5 - tier;
+
+				system("cls");
+				std::cout << "Score: " << this->score << std::endl;
+
 				if (tier > 1)
 				{
 					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), cow->GetRotation() - 1, tier - 1));

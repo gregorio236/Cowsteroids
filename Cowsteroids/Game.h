@@ -3,6 +3,7 @@
 
 #include <glm\vec2.hpp>
 #include <vector>
+#include <string>
 
 #include "Camera.h"
 #include "SpriteRenderer.h"
@@ -24,9 +25,12 @@ public:
 	void Collisions();
 	void Render();
 
-	bool IsOver();
+	bool GetIsOver();
+
+	void ShowScoreboard();
 
 private:
+	int score;
 	bool isOver;
 	std::vector<CowObject *> cows;
 	std::vector<ShotObject *>shots;

@@ -3,7 +3,6 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <string>
 
 #include "GL\glew.h"
 #include <SOIL.h>
@@ -31,6 +30,68 @@ Texture ResourceManager::LoadTexture(const char * file, bool hasAlpha, const cha
 Texture ResourceManager::GetTexture(const char * name)
 {
 	return textures[name];
+}
+
+std::vector<Score> ResourceManager::GetScoreBoard(const char * path)
+{
+	std::vector<Score> scoreboard;
+
+	std::fstream file;
+	file.open(path, std::ios::in | std::ios::binary);
+
+	if (!file.is_open())
+	{
+		std::cout << "Failed to open scoreboard file\n";
+	}
+	else
+	{
+		char a, b, c;
+		int score;
+		for (int i = 0; i < 10; i++)
+		{
+			file.read((char*)&a, sizeof(char));
+			file.read((char*)&b, sizeof(char));
+			file.read((char*)&c, sizeof(char));
+			file.read((char*)&score, sizeof(int));
+
+			std::stringstream name;
+			name << a << b << c;
+
+			Score s;
+			s.name = name.str();
+			s.score = score;
+
+			scoreboard.push_back(s);
+		}
+	}
+
+	file.close();
+
+	return scoreboard;
+}
+
+void ResourceManager::SetScoreBoard(const char * path, std::vector<Score> scoreboard)
+{
+	std::fstream file;
+	file.open(path, std::ios::out | std::ios::binary);
+
+	if (!file.is_open())
+	{
+		std::cout << "Failed to open scoreboard file\n";
+	}
+	else
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			const char * name = scoreboard[i].name.c_str();
+			int score = scoreboard[i].score;
+
+			file.write((char*)name, 3 * sizeof(char));
+			file.write((char*)&score, sizeof(int));
+		}
+	}
+
+	file.close();
 }
 
 void ResourceManager::Clear()
