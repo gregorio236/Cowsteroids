@@ -15,6 +15,7 @@ Game::Game(glm::vec2 windowSize)
 {
 	this->windowSize = windowSize;
 	this->worldSize = glm::vec2(1920.0f, 1080.0f);
+	this->isOver = false;
 }
 
 Game::~Game()
@@ -29,6 +30,10 @@ Game::~Game()
 	for (ShotObject * shot : shots)
 	{
 		delete shot;
+	}
+	for (Layer * layer : layers)
+	{
+		delete layer;
 	}
 }
 
@@ -59,27 +64,36 @@ void Game::Initialize()
 
 	for (int i = 0; i < 10; i++)
 	{
-		float x = (rand() % ((int)this->worldSize.x - 200)) + 100;
-		float y = (rand() % ((int)this->worldSize.y - 200)) + 100;
+		float x = (rand() % ((int)this->worldSize.x - 400)) + 200;
+		while (x < player->GetPos().x + 200 && x > player->GetPos().x - 200)
+		{
+			x = (rand() % ((int)this->worldSize.x - 400)) + 200;
+		}
+
+		float y = (rand() % ((int)this->worldSize.y - 400)) + 200;
+		while (y < player->GetPos().y + 200 && x > player->GetPos().y - 200)
+		{
+			y = (rand() % ((int)this->worldSize.y - 400)) + 200;
+		}
 		int ang = rand() % 360;
+		std::cout << x << " - " << y << std::endl;
 		cows.push_back(new CowObject(glm::vec2(x, y), ResourceManager::GetTexture("cow"), (ang * M_PI) / 180, 4));
 	}
 
-
-	layers.push_back(new Layer(ResourceManager::GetTexture("wall"), glm::vec2(-10.0f, -10.0f), glm::vec2(1940.0f, 1100.0f), 0, 0.0f, this->worldSize*0.5f));
+	layers.push_back(new Layer(ResourceManager::GetTexture("wall"), glm::vec2(-10.0f, -10.0f), glm::vec2(1940.0f, 1100.0f), 1.0f, 0.0f, this->worldSize*0.5f));
 
 	float x = (rand() % ((int)this->worldSize.x - 200)) + 100;
 	float y = (rand() % ((int)this->worldSize.y - 200)) + 100;
-	layers.push_back(new Layer(ResourceManager::GetTexture("planet1"), glm::vec2(x, y), glm::vec2(150.0f, 150.0f), -3, 0.1f, this->worldSize*0.5f));
+	layers.push_back(new Layer(ResourceManager::GetTexture("planet1"), glm::vec2(x, y), glm::vec2(150.0f, 150.0f), 0.1f, 0.1f, this->worldSize*0.5f));
 	x = (rand() % ((int)this->worldSize.x - 200)) + 100;
 	y = (rand() % ((int)this->worldSize.y - 200)) + 100;
-	layers.push_back(new Layer(ResourceManager::GetTexture("planet2"), glm::vec2(x, y), glm::vec2(500.0f, 500.0f), -1, 0.3f, this->worldSize*0.5f));
+	layers.push_back(new Layer(ResourceManager::GetTexture("planet3"), glm::vec2(x, y), glm::vec2(300.0f, 300.0f), 0.2f, 0.2f, this->worldSize*0.5f));
 	x = (rand() % ((int)this->worldSize.x - 200)) + 100;
 	y = (rand() % ((int)this->worldSize.y - 200)) + 100;
-	layers.push_back(new Layer(ResourceManager::GetTexture("planet3"), glm::vec2(x, y), glm::vec2(300.0f, 300.0f), -2, 0.2f, this->worldSize*0.5f));
+	layers.push_back(new Layer(ResourceManager::GetTexture("planet2"), glm::vec2(x, y), glm::vec2(500.0f, 500.0f), 0.3f, 0.3f, this->worldSize*0.5f));
 	glm::vec2 sunSize = glm::vec2(50.0f, 50.0f);
-	layers.push_back(new Layer(ResourceManager::GetTexture("sun"), ((this->worldSize - sunSize)*0.5f), sunSize, -98, 0.9f, this->worldSize*0.5f));
-	layers.push_back(new Layer(ResourceManager::GetTexture("stars"), glm::vec2(0.0f, 0.0f), this->worldSize, -99, 1.0f, this->worldSize*0.5f));
+	layers.push_back(new Layer(ResourceManager::GetTexture("sun"), ((this->worldSize - sunSize)*0.5f), sunSize, -0.8f, 0.9f, this->worldSize*0.5f));
+	layers.push_back(new Layer(ResourceManager::GetTexture("stars"), glm::vec2(0.0f, 0.0f), this->worldSize, -0.9f, 1.0f, this->worldSize*0.5f));
 }
 
 void Game::HandleInput(float dt)
@@ -135,22 +149,27 @@ void Game::Collisions()
 
 void Game::Render()
 {
-	player->Draw(*spriteRenderer, 3);
+	player->Draw(*spriteRenderer, 1.0f);
 
 	for (ShotObject * shot : shots)
 	{
-		shot->Draw(*spriteRenderer, 2);
+		shot->Draw(*spriteRenderer, 0.9f);
 	}
 
 	for (CowObject * cow : cows)
 	{
-		cow->Draw(*spriteRenderer, 1);
+		cow->Draw(*spriteRenderer, 0.8f);
 	}
 
 	for (Layer * layer : layers)
 	{
 		layer->Draw(*spriteRenderer, player->GetPos() + player->GetCOM());
 	}
+}
+
+bool Game::IsOver()
+{
+	return this->isOver;
 }
 
 void Game::PlayerCollisions()
@@ -175,10 +194,14 @@ void Game::PlayerCollisions()
 		player->SetPos(glm::vec2(player->GetPos().x, this->worldSize.y - player->GetSize().y));
 	}
 
-	if (CollisionManager::Colided(player, cows[0]))
+	for (CowObject * cow : cows)
 	{
-
+		if (CollisionManager::Colided(player, cow))
+		{
+			//std::cout << "Colidiu" << std::endl;
+		}
 	}
+
 }
 
 void Game::CowCollisions()

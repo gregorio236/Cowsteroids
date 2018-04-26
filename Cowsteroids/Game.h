@@ -24,7 +24,10 @@ public:
 	void Collisions();
 	void Render();
 
+	bool IsOver();
+
 private:
+	bool isOver;
 	std::vector<CowObject *> cows;
 	std::vector<ShotObject *>shots;
 	glm::vec2 windowSize;

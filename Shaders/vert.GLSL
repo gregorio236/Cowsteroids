@@ -5,10 +5,10 @@ out vec2 TexCoords;
 
 uniform mat4 model;
 uniform mat4 projection;
-uniform float z;
+uniform float layer;
 
 void main()
 {
 	TexCoords = vertex.zw;
-    gl_Position = projection * model * vec4(vertex.xy, z, 1.0);
+    gl_Position = projection * model * vec4(vertex.xy, layer, 1.0);
 }

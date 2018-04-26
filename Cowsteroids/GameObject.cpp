@@ -10,7 +10,7 @@ GameObject::~GameObject()
 
 }
 
-void GameObject::Draw(SpriteRenderer & renderer, int z)
+void GameObject::Draw(SpriteRenderer & renderer, float z)
 {
 	renderer.DrawSprite(this->sprite, this->position, this->size, z, this->rotation, this->color);
 }

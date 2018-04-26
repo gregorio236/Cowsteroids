@@ -10,7 +10,7 @@ class Layer
 {
 public:
 	Layer();
-	Layer(Texture sprite, glm::vec2 pos, glm::vec2 size, int z, float parallax, glm::vec2 worldCenter);
+	Layer(Texture sprite, glm::vec2 pos, glm::vec2 size, float z, float parallax, glm::vec2 worldCenter);
 	~Layer();
 
 	void Draw(SpriteRenderer& renderer, glm::vec2 center);
@@ -19,7 +19,7 @@ private:
 	Texture sprite;
 	glm::vec2 position;
 	glm::vec2 size;
-	int z;
+	float z;
 	float parallax;
 	glm::vec2 worldCenter;
 };

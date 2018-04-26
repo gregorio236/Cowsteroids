@@ -15,7 +15,7 @@ public:
 	~SpriteRenderer();
 
 	//Desenha a sprite
-	void DrawSprite(Texture &texture, glm::vec2 pos, glm::vec2 size, int z,
+	void DrawSprite(Texture &texture, glm::vec2 pos, glm::vec2 size, float z,
 		float rotation = 0.0f, glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f));
 
 private:

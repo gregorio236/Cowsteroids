@@ -20,7 +20,7 @@ public:
 	glm::vec2 GetCOM();
 	float GetRadius();
 
-	void Draw(SpriteRenderer &renderer, int z);
+	void Draw(SpriteRenderer &renderer, float z);
 
 protected:
 	glm::vec2 position;
