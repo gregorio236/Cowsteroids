@@ -4,6 +4,7 @@
 #include <glm\vec2.hpp>
 #include <glm\vec3.hpp>
 
+#include "Sprite.h"
 #include "SpriteRenderer.h"
 #include "Texture.h"
 
@@ -20,7 +21,7 @@ public:
 	glm::vec2 GetCOM();
 	float GetRadius();
 
-	void Draw(SpriteRenderer &renderer, float z);
+	void Draw(SpriteRenderer &renderer, float z, float dt);
 
 protected:
 	glm::vec2 position;
@@ -28,7 +29,7 @@ protected:
 	glm::vec3 color;
 	float rotation;
 
-	Texture sprite;
+	Sprite sprite;
 
 	glm::vec2 COM;
 	float radius;

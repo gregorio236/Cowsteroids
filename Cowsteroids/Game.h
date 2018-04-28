@@ -23,7 +23,7 @@ public:
 	void HandleInput(float dt);
 	void Update(float dt);
 	void Collisions();
-	void Render();
+	void Render(float dt);
 
 	bool GetIsOver();
 

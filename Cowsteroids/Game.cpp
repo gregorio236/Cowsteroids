@@ -45,7 +45,7 @@ void Game::Initialize()
 	ResourceManager::GetShader("sprite").Use().SetUniform("image", 0);
 
 	ResourceManager::LoadTexture("../Assets/stars.png", true, "stars");
-	ResourceManager::LoadTexture("../Assets/cow.png", true, "cow");
+	ResourceManager::LoadTexture("../Assets/cow2.png", true, "cow");
 	ResourceManager::LoadTexture("../Assets/ship.png", true, "ship");
 	ResourceManager::LoadTexture("../Assets/shot.png", true, "shot");
 	ResourceManager::LoadTexture("../Assets/planet1.png", true, "planet1");
@@ -60,7 +60,7 @@ void Game::Initialize()
 
 	camera = new Camera();
 
-	camera->Update(player->GetPos(), this->windowSize * 0.5f, this->worldSize, "sprite", "projection");
+	camera->Update(player->GetPos(), this->windowSize * 0.5f, "sprite", "projection");
 
 	srand(time(NULL));
 
@@ -126,7 +126,7 @@ void Game::Update(float dt)
 	}
 
 	player->Update(dt);
-	camera->Update(player->GetPos(), this->windowSize * 0.5f, this->worldSize, "sprite", "projection");
+	camera->Update(player->GetPos(), this->windowSize * 0.5f, "sprite", "projection");
 }
 
 void Game::Collisions()
@@ -136,18 +136,18 @@ void Game::Collisions()
 	ShotCollisions();
 }
 
-void Game::Render()
+void Game::Render(float dt)
 {
-	player->Draw(*spriteRenderer, 1.0f);
+	player->Draw(*spriteRenderer, 1.0f, dt);
 
 	for (ShotObject * shot : shots)
 	{
-		shot->Draw(*spriteRenderer, 0.9f);
+		shot->Draw(*spriteRenderer, 0.9f, dt);
 	}
 
 	for (CowObject * cow : cows)
 	{
-		cow->Draw(*spriteRenderer, 0.8f);
+		cow->Draw(*spriteRenderer, 0.8f, dt);
 	}
 
 	for (Layer * layer : layers)

@@ -15,7 +15,7 @@ SpriteRenderer::~SpriteRenderer()
 	glDeleteVertexArrays(1, &this->VAO);
 }
 
-void SpriteRenderer::DrawSprite(Texture & texture, glm::vec2 pos, glm::vec2 size, float z, float rotation, glm::vec3 color)
+void SpriteRenderer::DrawSprite(Texture & texture, glm::vec2 pos, glm::vec2 size, float z, float offset, int frameCount, float rotation, glm::vec3 color)
 {
 	//Matriz modelo da sprite
 	glm::mat4 model = {
@@ -45,6 +45,8 @@ void SpriteRenderer::DrawSprite(Texture & texture, glm::vec2 pos, glm::vec2 size
 	this->shader.Use().SetUniform("model", model);
 	this->shader.SetUniform("spriteColor", color);
 	this->shader.SetUniform("layer", z);
+	this->shader.SetUniform("offset", offset);
+	this->shader.SetUniform("frameCount", frameCount);
 
 	//Ativa a textura
 	glActiveTexture(GL_TEXTURE0);
