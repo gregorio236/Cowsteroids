@@ -10,7 +10,7 @@ PlayerObject::PlayerObject(glm::vec2 pos, Texture sprite)
 	this->size = glm::vec2(64.0f, 64.0f);
 	this->color = glm::vec3(1.0f, 1.0f, 1.0f);
 	this->rotation = 0.0f;
-	this->sprite = Sprite(sprite, 1, 0.1f);
+	this->sprite = Sprite(sprite, 4, 0.1f);
 	this->speed = 0.0f;
 	this->acceleration = 0.0f;
 	this->COM = glm::vec2(0.375f * this->size.x, 0.5 * this->size.y);

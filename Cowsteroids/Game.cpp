@@ -46,7 +46,7 @@ void Game::Initialize()
 
 	ResourceManager::LoadTexture("../Assets/stars.png", true, "stars");
 	ResourceManager::LoadTexture("../Assets/cow2.png", true, "cow");
-	ResourceManager::LoadTexture("../Assets/ship.png", true, "ship");
+	ResourceManager::LoadTexture("../Assets/ship2.png", true, "ship");
 	ResourceManager::LoadTexture("../Assets/shot.png", true, "shot");
 	ResourceManager::LoadTexture("../Assets/planet1.png", true, "planet1");
 	ResourceManager::LoadTexture("../Assets/planet2.png", true, "planet2");
