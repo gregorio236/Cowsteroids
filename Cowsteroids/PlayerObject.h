@@ -5,14 +5,15 @@
 #include <glm\vec3.hpp>
 
 #include "GameObject.h"
+#include "Configuration.h"
 
 class PlayerObject : public GameObject
 {
 public:
-	PlayerObject(glm::vec2 pos, Texture sprite);
+	PlayerObject(glm::vec2 pos, Texture sprite, Configuration config);
 	~PlayerObject();
 
-	void Update(float dt);
+	void Update(float dt) override;
 
 	void RotateCW(float dt);
 	void RotateCCW(float dt);
@@ -20,7 +21,6 @@ public:
 	void Stop(float dt);
 
 private:
-	float speed;
 	float acceleration;
 	float accelerationRate;
 	float desacceleration;

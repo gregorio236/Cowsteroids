@@ -3,7 +3,9 @@
 
 #include <glm\vec2.hpp>
 #include <glm\vec3.hpp>
+#include <string>
 
+#include "Configuration.h"
 #include "Sprite.h"
 #include "SpriteRenderer.h"
 #include "Texture.h"
@@ -11,7 +13,7 @@
 class GameObject
 {
 public:
-	GameObject();
+	GameObject(glm::vec2 pos, Texture sprite, float rotation, Configuration config);
 	~GameObject();
 
 	float GetRotation();
@@ -23,12 +25,14 @@ public:
 
 	void Draw(SpriteRenderer &renderer, float z, float dt);
 
+	virtual void Update(float dt);
+
 protected:
 	glm::vec2 position;
 	glm::vec2 size;
 	glm::vec3 color;
 	float rotation;
-	int rotationDirection;
+	float speed;
 
 	Sprite sprite;
 

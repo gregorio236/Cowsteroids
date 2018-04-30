@@ -1,0 +1,5 @@
+count:c-4
+planet1:file-planet1.png/size-150/z-0.1/parallax-0.1
+planet2:file-planet2.png/size-500/z-0.3/parallax-0.3
+planet3:file-planet3.png/size-300/z-0.2/parallax-0.2
+planet4:file-planet4.png/size-500/z-0.4/parallax-0.4

@@ -4,21 +4,15 @@
 #include <iostream>
 #include "InputManager.h"
 
-PlayerObject::PlayerObject(glm::vec2 pos, Texture sprite)
+PlayerObject::PlayerObject(glm::vec2 pos, Texture sprite, Configuration config)
+	: GameObject(pos, sprite, 0.0f, config)
 {
-	this->position = pos;
-	this->size = glm::vec2(64.0f, 64.0f);
-	this->color = glm::vec3(1.0f, 1.0f, 1.0f);
-	this->rotation = 0.0f;
-	this->sprite = Sprite(sprite, 4, 0.1f);
 	this->speed = 0.0f;
 	this->acceleration = 0.0f;
-	this->COM = glm::vec2(0.375f * this->size.x, 0.5 * this->size.y);
-	this->radius = 0.3671875f * this->size.x;
-	this->accelerationRate = 25.0f;
-	this->desacceleration = 10.0f;
-	this->maxSpeed = 5.0f;
-	this->rotationSpeed = 5.0f;
+	this->accelerationRate = std::stof(config["acceleration"]["a"]);
+	this->desacceleration = std::stof(config["desacceleration"]["d"]);
+	this->maxSpeed = std::stof(config["speed"]["s"]);
+	this->rotationSpeed = std::stof(config["rotation"]["r"]);
 }
 
 PlayerObject::~PlayerObject()

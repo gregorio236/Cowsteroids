@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 
+#include "Configuration.h"
 #include "Shader.h"
 #include "Texture.h"
 
@@ -18,26 +19,28 @@ class ResourceManager
 {
 public:
 	//Carrega um shader dado os caminhos dos arquivos
-	static Shader LoadShader(const char* vertFile, const char* fragFile, const char* name);
+	static Shader LoadShader(std::string vertFile, std::string fragFile, std::string name);
 	//Pega um shader pelo nome
-	static Shader GetShader(const char* name);
+	static Shader GetShader(std::string name);
 
 	//Carrega uma textura dado o caminho da imagem
-	static Texture LoadTexture(const char* file, bool hasAlpha, const char* name);
+	static Texture LoadTexture(std::string file, bool hasAlpha, std::string name);
 	//Pega uma textura pelo nome
-	static Texture GetTexture(const char* name);
+	static Texture GetTexture(std::string name);
 
-	static std::vector<Score> GetScoreBoard(const char* path);
-	static void SetScoreBoard(const char* path, std::vector<Score> scoreboard);
+	static std::vector<Score> GetScoreBoard(std::string path);
+	static void SetScoreBoard(std::string path, std::vector<Score> scoreboard);
+
+	static Configuration LoadConfiguration(std::string path);
 
 	static void Clear();
 
 private:
-	static std::map<const char*, Shader> shaders;
-	static std::map<const char*, Texture> textures;
+	static std::map<std::string, Shader> shaders;
+	static std::map<std::string, Texture> textures;
 
-	static Shader loadShaderFromFile(const char* vertFile, const char* fragFile);
-	static Texture loadTextureFromFile(const char* file, bool hasAlpha);
+	static Shader loadShaderFromFile(std::string vertFile, std::string fragFile);
+	static Texture loadTextureFromFile(std::string file, bool hasAlpha);
 };
 
 #endif

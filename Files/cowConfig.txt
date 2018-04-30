@@ -1,0 +1,5 @@
+size:x-32/y-32
+sprite:file-cow.png/frames-6/speed-0.3
+com:x-0.5/y-0.515503876
+radius:r-0.34496124
+speed:s-2.5

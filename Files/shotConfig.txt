@@ -1,0 +1,5 @@
+size:x-16/y-16
+sprite:file-shot.png/frames-1/speed-0.1
+com:x-0.484375/y-0.5
+radius:r-0.40625
+speed:s-10

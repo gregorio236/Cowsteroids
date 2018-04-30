@@ -44,6 +44,11 @@ private:
 	PlayerObject * player;
 	Camera * camera;
 
+	Configuration cowConfig;
+	Configuration playerConfig;
+	Configuration shotConfig;
+	Configuration planetsConfig;
+
 	void PlayerCollisions();
 	void CowCollisions();
 	void ShotCollisions();

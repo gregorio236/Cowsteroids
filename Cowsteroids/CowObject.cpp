@@ -2,19 +2,19 @@
 
 #include <random>
 
-CowObject::CowObject(glm::vec2 pos, Texture sprite, float rotation, int tier)
+CowObject::CowObject(glm::vec2 pos, Texture sprite, float rotation, Configuration config, int tier)
+	: GameObject(pos, sprite, rotation, config)
 {
-	this->position = pos;
 	this->tier = tier;
-	this->size = glm::vec2(32.0f * tier, 32.0f * tier);
-	this->color = glm::vec3(1.0f, 1.0f, 1.0f);
-	this->rotation = rotation;
-	this->sprite = Sprite(sprite, 6, 0.3f);
-	this->COM = glm::vec2(0.5f * this->size.x, 0.515503876f * this->size.y);
-	this->radius = 0.34496124f * this->size.x;
-	//this->COM = glm::vec2(0.4921875f * this->size.x, 0.5f * this->size.y);
-	//this->radius = 0.4453125f * this->size.x;
-	this->speed = 2.5f / tier;
+	this->size *= tier;
+	this->speed /= tier;
+
+	float comX = std::stof(config["com"]["x"]);
+	float comY = std::stof(config["com"]["y"]);
+	this->COM = glm::vec2(comX * this->size.x, comY* this->size.y);
+
+	this->radius = std::stof(config["radius"]["r"]) * this->size.x;
+
 	this->direction = glm::vec2(speed * cos(rotation), speed * sin(rotation));
 	this->rotationDirection = rand() % 2 == 0 ? -1 : 1;
 }

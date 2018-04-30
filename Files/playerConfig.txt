@@ -1,0 +1,8 @@
+size:x-64/y-64
+sprite:file-ship2.png/frames-6/speed-0.1
+com:x-0.375/y-0.5
+radius:r-0.3671875
+speed:s-5
+acceleration:a-25
+desacceleration:d-10
+rotation:r-5

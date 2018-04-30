@@ -7,32 +7,32 @@
 #include "GL\glew.h"
 #include <SOIL.h>
 
-std::map<const char*, Shader> ResourceManager::shaders;
-std::map<const char*, Texture> ResourceManager::textures;
+std::map<std::string, Shader> ResourceManager::shaders;
+std::map<std::string, Texture> ResourceManager::textures;
 
-Shader ResourceManager::LoadShader(const char * vertFile, const char * fragFile, const char * name)
+Shader ResourceManager::LoadShader(std::string vertFile, std::string fragFile, std::string name)
 {
 	shaders[name] = loadShaderFromFile(vertFile, fragFile);
 	return shaders[name];
 }
 
-Shader ResourceManager::GetShader(const char * name)
+Shader ResourceManager::GetShader(std::string name)
 {
 	return shaders[name];
 }
 
-Texture ResourceManager::LoadTexture(const char * file, bool hasAlpha, const char * name)
+Texture ResourceManager::LoadTexture(std::string file, bool hasAlpha, std::string name)
 {
 	textures[name] = loadTextureFromFile(file, hasAlpha);
 	return textures[name];
 }
 
-Texture ResourceManager::GetTexture(const char * name)
+Texture ResourceManager::GetTexture(std::string name)
 {
 	return textures[name];
 }
 
-std::vector<Score> ResourceManager::GetScoreBoard(const char * path)
+std::vector<Score> ResourceManager::GetScoreBoard(std::string path)
 {
 	std::vector<Score> scoreboard;
 
@@ -71,7 +71,7 @@ std::vector<Score> ResourceManager::GetScoreBoard(const char * path)
 	return scoreboard;
 }
 
-void ResourceManager::SetScoreBoard(const char * path, std::vector<Score> scoreboard)
+void ResourceManager::SetScoreBoard(std::string path, std::vector<Score> scoreboard)
 {
 	std::fstream file;
 	file.open(path, std::ios::out | std::ios::binary);
@@ -95,6 +95,22 @@ void ResourceManager::SetScoreBoard(const char * path, std::vector<Score> scoreb
 	file.close();
 }
 
+Configuration ResourceManager::LoadConfiguration(std::string path)
+{
+	std::ifstream file;
+	file.open(path);
+
+	std::vector<std::string> lines;
+	std::string s;
+
+	while (std::getline(file, s))
+	{
+		lines.push_back(s);
+	}
+
+	return Configuration(lines);
+}
+
 void ResourceManager::Clear()
 {
 	for (auto s : shaders)
@@ -107,7 +123,7 @@ void ResourceManager::Clear()
 	}
 }
 
-Shader ResourceManager::loadShaderFromFile(const char * vertFile, const char * fragFile)
+Shader ResourceManager::loadShaderFromFile(std::string vertFile, std::string fragFile)
 {
 	std::string vertCode;
 	std::string fragCode;
@@ -142,11 +158,11 @@ Shader ResourceManager::loadShaderFromFile(const char * vertFile, const char * f
 	return shader;
 }
 
-Texture ResourceManager::loadTextureFromFile(const char * file, bool hasAlpha)
+Texture ResourceManager::loadTextureFromFile(std::string file, bool hasAlpha)
 {
 	Texture texture(hasAlpha);
 	int width, height;
-	unsigned char* image = SOIL_load_image(file, &width, &height, 0, hasAlpha ? SOIL_LOAD_RGBA : SOIL_LOAD_RGB);
+	unsigned char* image = SOIL_load_image(file.c_str(), &width, &height, 0, hasAlpha ? SOIL_LOAD_RGBA : SOIL_LOAD_RGB);
 	if (image)
 	{
 		texture.Generate(width, height, image);

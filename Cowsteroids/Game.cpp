@@ -10,6 +10,7 @@
 #include "InputManager.h"
 #include "ResourceManager.h"
 #include "CollisionManager.h"
+#include "Configuration.h"
 
 Game::Game(glm::vec2 windowSize)
 {
@@ -46,19 +47,28 @@ void Game::Initialize()
 	ResourceManager::LoadShader("../Shaders/vert.GLSL", "../Shaders/frag.GLSL", "sprite");
 	ResourceManager::GetShader("sprite").Use().SetUniform("image", 0);
 
+	this->cowConfig = ResourceManager::LoadConfiguration("../Files/cowConfig.txt");
+	this->playerConfig = ResourceManager::LoadConfiguration("../Files/playerConfig.txt");
+	this->shotConfig = ResourceManager::LoadConfiguration("../Files/shotConfig.txt");
+	this->planetsConfig = ResourceManager::LoadConfiguration("../Files/planetsConfig.txt");
+
 	ResourceManager::LoadTexture("../Assets/stars.png", true, "stars");
-	ResourceManager::LoadTexture("../Assets/cow3.png", true, "cow");
-	ResourceManager::LoadTexture("../Assets/ship2.png", true, "ship");
-	ResourceManager::LoadTexture("../Assets/shot.png", true, "shot");
-	ResourceManager::LoadTexture("../Assets/planet1.png", true, "planet1");
-	ResourceManager::LoadTexture("../Assets/planet2.png", true, "planet2");
-	ResourceManager::LoadTexture("../Assets/planet3.png", true, "planet3");
+	ResourceManager::LoadTexture("../Assets/" + this->cowConfig["sprite"]["file"], true, "cow");
+	ResourceManager::LoadTexture("../Assets/" + this->playerConfig["sprite"]["file"], true, "ship");
+	ResourceManager::LoadTexture("../Assets/" + this->shotConfig["sprite"]["file"], true, "shot");
+
+	int count = std::stoi(this->planetsConfig["count"]["c"]);
+	for (int i = 1; i <= count; i++)
+	{
+		ResourceManager::LoadTexture("../Assets/" + this->planetsConfig["planet" + std::to_string(i)]["file"], true, "planet" + std::to_string(i));
+	}
+
 	ResourceManager::LoadTexture("../Assets/sun.png", true, "sun");
 	ResourceManager::LoadTexture("../Assets/wall.png", true, "wall");
 
 	spriteRenderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 
-	player = new PlayerObject(glm::vec2(this->worldSize.x / 2, this->worldSize.y / 2), ResourceManager::GetTexture("ship"));
+	player = new PlayerObject(glm::vec2(this->worldSize.x / 2, this->worldSize.y / 2), ResourceManager::GetTexture("ship"), this->playerConfig);
 
 	camera = new Camera();
 
@@ -73,21 +83,22 @@ void Game::Initialize()
 
 	layers.push_back(new Layer(ResourceManager::GetTexture("wall"), glm::vec2(-10.0f, -10.0f), glm::vec2(1940.0f, 1100.0f), 1.0f, 0.0f, this->worldSize*0.5f));
 
-	float x = (rand() % ((int)this->worldSize.x - 200)) + 100;
-	float y = (rand() % ((int)this->worldSize.y - 200)) + 100;
-	layers.push_back(new Layer(ResourceManager::GetTexture("planet1"), glm::vec2(x, y), glm::vec2(150.0f, 150.0f), 0.1f, 0.1f, this->worldSize*0.5f));
-	
-	x = (rand() % ((int)this->worldSize.x - 200)) + 100;
-	y = (rand() % ((int)this->worldSize.y - 200)) + 100;
-	layers.push_back(new Layer(ResourceManager::GetTexture("planet3"), glm::vec2(x, y), glm::vec2(300.0f, 300.0f), 0.2f, 0.2f, this->worldSize*0.5f));
-	
-	x = (rand() % ((int)this->worldSize.x - 200)) + 100;
-	y = (rand() % ((int)this->worldSize.y - 200)) + 100;
-	layers.push_back(new Layer(ResourceManager::GetTexture("planet2"), glm::vec2(x, y), glm::vec2(500.0f, 500.0f), 0.3f, 0.3f, this->worldSize*0.5f));
-	
+	count = std::stoi(this->planetsConfig["count"]["c"]);
+	for (int i = 1; i <= count; i++)
+	{
+		float x = (rand() % ((int)this->worldSize.x - 200)) + 100;
+		float y = (rand() % ((int)this->worldSize.y - 200)) + 100;
+
+		float size = std::stof(this->planetsConfig["planet" + std::to_string(i)]["size"]);
+		float z = std::stof(this->planetsConfig["planet" + std::to_string(i)]["z"]);
+		float parallax = std::stof(this->planetsConfig["planet" + std::to_string(i)]["parallax"]);
+
+		layers.push_back(new Layer(ResourceManager::GetTexture("planet" + std::to_string(i)), glm::vec2(x, y), glm::vec2(size, size), z, parallax, this->worldSize*0.5f));
+	}
+
 	glm::vec2 sunSize = glm::vec2(50.0f, 50.0f);
 	layers.push_back(new Layer(ResourceManager::GetTexture("sun"), ((this->worldSize - sunSize)*0.5f), sunSize, -0.8f, 0.9f, this->worldSize*0.5f));
-	
+
 	layers.push_back(new Layer(ResourceManager::GetTexture("stars"), glm::vec2(0.0f, 0.0f), this->worldSize, -0.9f, 1.0f, this->worldSize*0.5f));
 }
 
@@ -115,7 +126,7 @@ void Game::HandleInput(float dt)
 	{
 		glm::vec2 pos = player->GetPos() + player->GetSize()*0.5f;
 		float rot = player->GetRotation();
-		shots.push_back(new ShotObject(pos, ResourceManager::GetTexture("shot"), rot));
+		shots.push_back(new ShotObject(pos, ResourceManager::GetTexture("shot"), rot, this->shotConfig));
 	}
 }
 
@@ -124,8 +135,8 @@ void Game::Update(float dt)
 	spawnCounter += dt;
 	if (cows.size() < 10 || spawnCounter >= spawnDelay)
 	{
-		spawnCounter = 0.0f;
-		cows.push_back(this->SpawnCow(true));
+		/*spawnCounter = 0.0f;
+		cows.push_back(this->SpawnCow(true));*/
 	}
 
 	for (CowObject * cow : cows)
@@ -156,6 +167,12 @@ void Game::Render(float dt)
 	for (ShotObject * shot : shots)
 	{
 		shot->Draw(*spriteRenderer, 0.9f, dt);
+	}
+
+	for (int i = 0; i < cows.size(); i++)
+	{
+		float z = 0.8f + (i / 100.0f);
+		cows[i]->Draw(*spriteRenderer, z, dt);
 	}
 
 	for (CowObject * cow : cows)
@@ -284,8 +301,8 @@ void Game::CowCollisions()
 
 				if (tier > 1)
 				{
-					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), cow->GetRotation() - 1, tier - 1));
-					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), cow->GetRotation() + 1, tier - 1));
+					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), cow->GetRotation() - 1, this->cowConfig, tier - 1));
+					cows.push_back(new CowObject(cow->GetPos(), ResourceManager::GetTexture("cow"), cow->GetRotation() + 1, this->cowConfig, tier - 1));
 				}
 
 				delete shot;
@@ -294,6 +311,11 @@ void Game::CowCollisions()
 				delete cow;
 				cows.erase(cows.begin() + i);
 				i--;
+
+				if (cows.size() < 10)
+				{
+					cows.push_back(this->SpawnCow(true));
+				}
 
 				break;
 			}
@@ -344,7 +366,7 @@ CowObject * Game::SpawnCow(bool avoidPlayer)
 
 	int ang = rand() % 360;
 
-	cow = new CowObject(glm::vec2(x, y), ResourceManager::GetTexture("cow"), (ang * M_PI) / 180, 4);
+	cow = new CowObject(glm::vec2(x, y), ResourceManager::GetTexture("cow"), (ang * M_PI) / 180, this->cowConfig, 4);
 
 	return cow;
 }
