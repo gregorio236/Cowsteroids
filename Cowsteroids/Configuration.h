@@ -17,7 +17,7 @@ public:
 private:
 	std::map<std::string, std::map<std::string, std::string>> config;
 
-	std::vector<std::string> splitString(std::string s, char c);
+	static std::vector<std::string> splitString(std::string s, char c);
 
 };
 

@@ -1,16 +1,18 @@
 #include "Game.h"
+
 #define _USE_MATH_DEFINES
 
-#include <math.h>
-#include <GLFW\glfw3.h>
 #include <iostream>
+#include <math.h>
 #include <random>
 #include <time.h>
 
-#include "InputManager.h"
-#include "ResourceManager.h"
+#include <GLFW\glfw3.h>
+
 #include "CollisionManager.h"
 #include "Configuration.h"
+#include "InputManager.h"
+#include "ResourceManager.h"
 
 Game::Game(glm::vec2 windowSize)
 {
@@ -18,9 +20,9 @@ Game::Game(glm::vec2 windowSize)
 	this->worldSize = glm::vec2(1920.0f, 1080.0f);
 	this->isOver = false;
 	this->score = 0;
-	this->spawnCounter = 0.0f;
-	this->spawnDelay = 5.0f;
 	std::cout << "Score: " << score << std::endl;
+
+	srand(time(NULL));
 }
 
 Game::~Game()
@@ -47,11 +49,14 @@ void Game::Initialize()
 	ResourceManager::LoadShader("../Shaders/vert.GLSL", "../Shaders/frag.GLSL", "sprite");
 	ResourceManager::GetShader("sprite").Use().SetUniform("image", 0);
 
+#pragma region Configs
 	this->cowConfig = ResourceManager::LoadConfiguration("../Files/cowConfig.txt");
 	this->playerConfig = ResourceManager::LoadConfiguration("../Files/playerConfig.txt");
 	this->shotConfig = ResourceManager::LoadConfiguration("../Files/shotConfig.txt");
 	this->planetsConfig = ResourceManager::LoadConfiguration("../Files/planetsConfig.txt");
+#pragma endregion
 
+#pragma region Textures
 	ResourceManager::LoadTexture("../Assets/stars.png", true, "stars");
 	ResourceManager::LoadTexture("../Assets/" + this->cowConfig["sprite"]["file"], true, "cow");
 	ResourceManager::LoadTexture("../Assets/" + this->playerConfig["sprite"]["file"], true, "ship");
@@ -65,6 +70,7 @@ void Game::Initialize()
 
 	ResourceManager::LoadTexture("../Assets/sun.png", true, "sun");
 	ResourceManager::LoadTexture("../Assets/wall.png", true, "wall");
+#pragma endregion
 
 	spriteRenderer = new SpriteRenderer(ResourceManager::GetShader("sprite"));
 
@@ -74,14 +80,12 @@ void Game::Initialize()
 
 	camera->Update(player->GetPos(), this->windowSize * 0.5f, "sprite", "projection");
 
-	srand(time(NULL));
-
 	for (int i = 0; i < 10; i++)
 	{
 		cows.push_back(this->SpawnCow(true));
 	}
 
-	layers.push_back(new Layer(ResourceManager::GetTexture("wall"), glm::vec2(-10.0f, -10.0f), glm::vec2(1940.0f, 1100.0f), 1.0f, 0.0f, this->worldSize*0.5f));
+	layers.push_back(new Layer(ResourceManager::GetTexture("wall"), glm::vec2(-10.0f, -10.0f), glm::vec2(1940.0f, 1100.0f), 1.0f, 0.0f, this->worldSize * 0.5f));
 
 	count = std::stoi(this->planetsConfig["count"]["c"]);
 	for (int i = 1; i <= count; i++)
@@ -93,13 +97,13 @@ void Game::Initialize()
 		float z = std::stof(this->planetsConfig["planet" + std::to_string(i)]["z"]);
 		float parallax = std::stof(this->planetsConfig["planet" + std::to_string(i)]["parallax"]);
 
-		layers.push_back(new Layer(ResourceManager::GetTexture("planet" + std::to_string(i)), glm::vec2(x, y), glm::vec2(size, size), z, parallax, this->worldSize*0.5f));
+		layers.push_back(new Layer(ResourceManager::GetTexture("planet" + std::to_string(i)), glm::vec2(x, y), glm::vec2(size, size), z, parallax, this->worldSize * 0.5f));
 	}
 
 	glm::vec2 sunSize = glm::vec2(50.0f, 50.0f);
-	layers.push_back(new Layer(ResourceManager::GetTexture("sun"), ((this->worldSize - sunSize)*0.5f), sunSize, -0.8f, 0.9f, this->worldSize*0.5f));
+	layers.push_back(new Layer(ResourceManager::GetTexture("sun"), ((this->worldSize - sunSize)*0.5f), sunSize, -0.8f, 0.9f, this->worldSize * 0.5f));
 
-	layers.push_back(new Layer(ResourceManager::GetTexture("stars"), glm::vec2(0.0f, 0.0f), this->worldSize, -0.9f, 1.0f, this->worldSize*0.5f));
+	layers.push_back(new Layer(ResourceManager::GetTexture("stars"), glm::vec2(0.0f, 0.0f), this->worldSize, -0.9f, 1.0f, this->worldSize * 0.5f));
 }
 
 void Game::HandleInput(float dt)
@@ -124,21 +128,13 @@ void Game::HandleInput(float dt)
 
 	if (InputManager::Pressed(GLFW_KEY_SPACE))
 	{
-		glm::vec2 pos = player->GetPos() + player->GetSize()*0.5f;
-		float rot = player->GetRotation();
-		shots.push_back(new ShotObject(pos, ResourceManager::GetTexture("shot"), rot, this->shotConfig));
+		glm::vec2 pos = player->GetPos() + player->GetSize() * 0.5f;
+		shots.push_back(new ShotObject(pos, ResourceManager::GetTexture("shot"), player->GetRotation(), this->shotConfig));
 	}
 }
 
 void Game::Update(float dt)
 {
-	spawnCounter += dt;
-	if (cows.size() < 10 || spawnCounter >= spawnDelay)
-	{
-		/*spawnCounter = 0.0f;
-		cows.push_back(this->SpawnCow(true));*/
-	}
-
 	for (CowObject * cow : cows)
 	{
 		cow->Update(dt);
@@ -171,13 +167,8 @@ void Game::Render(float dt)
 
 	for (int i = 0; i < cows.size(); i++)
 	{
-		float z = 0.8f + (i / 100.0f);
+		float z = 0.8f + (i / 1000.0f);
 		cows[i]->Draw(*spriteRenderer, z, dt);
-	}
-
-	for (CowObject * cow : cows)
-	{
-		cow->Draw(*spriteRenderer, 0.8f, dt);
 	}
 
 	for (Layer * layer : layers)
@@ -194,6 +185,7 @@ bool Game::GetIsOver()
 void Game::ShowScoreboard()
 {
 	system("cls");
+
 	int score = this->score;
 	std::cout << "Score: " << score << std::endl;
 
@@ -225,7 +217,9 @@ void Game::ShowScoreboard()
 	{
 		std::cout << s.name << " - " << s.score << std::endl;
 	}
+
 	system("pause");
+
 	ResourceManager::SetScoreBoard("../Files/scoreboard.dat", scoreboard);
 }
 
@@ -268,22 +262,14 @@ void Game::CowCollisions()
 
 		bool * collision = CollisionManager::Colided(cow, this->worldSize);
 
-		if (collision[COL_LEFT])
+		if (collision[COL_LEFT] || collision[COL_RIGHT])
 		{
-			cow->direction.x *= -1;
-		}
-		else if (collision[COL_RIGHT])
-		{
-			cow->direction.x *= -1;
+			cow->BounceHorizontal();
 		}
 
-		if (collision[COL_TOP])
+		if (collision[COL_TOP] || collision[COL_DOWM])
 		{
-			cow->direction.y *= -1;
-		}
-		else if (collision[COL_DOWM])
-		{
-			cow->direction.y *= -1;
+			cow->BounceVertical();
 		}
 
 		for (int j = 0; j < shots.size(); j++)

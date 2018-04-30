@@ -3,8 +3,6 @@
 
 #include <glm\vec2.hpp>
 
-#include "GameObject.h"
-
 class Camera
 {
 public:

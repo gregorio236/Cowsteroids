@@ -18,7 +18,7 @@ GameObject::GameObject(glm::vec2 pos, Texture sprite, float rotation, Configurat
 
 	float comX = std::stof(config["com"]["x"]);
 	float comY = std::stof(config["com"]["y"]);
-	this->COM = glm::vec2(comX * this->size.x, comY* this->size.y);
+	this->COM = glm::vec2(comX * this->size.x, comY * this->size.y);
 
 	this->radius = std::stof(config["radius"]["r"]) * this->size.x;
 

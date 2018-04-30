@@ -19,7 +19,7 @@ Shader& Shader::Use()
 {
 	//Ativa o shader program para ser utilizado
 	glUseProgram(this->ID);
-	return *this;
+	return * this;
 }
 
 void Shader::Compile(const char * vertSource, const char * fragSource)

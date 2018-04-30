@@ -20,6 +20,7 @@ public:
 	//Colisao entre dois objetos
 	static bool Colided(GameObject * obj1, GameObject * obj2);
 	//"Colisao" com as bordas do mundo
+	//Retorna um array de tamanho 4 com as colisoes para cada lado
 	static bool * Colided(GameObject * obj, glm::vec2 worldSize);
 };
 

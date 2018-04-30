@@ -1,0 +1,2 @@
+Moviment -> WASD or Keys
+Shoot    -> Space

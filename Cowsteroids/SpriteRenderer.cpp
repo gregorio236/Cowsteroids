@@ -1,6 +1,7 @@
 #include "SpriteRenderer.h"
 
 #include <GL\glew.h>
+#include <glm\mat4x4.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 
 SpriteRenderer::SpriteRenderer(Shader & shader)

@@ -2,8 +2,8 @@
 #define RESOURCE_MANAGER_H
 
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "Configuration.h"
 #include "Shader.h"

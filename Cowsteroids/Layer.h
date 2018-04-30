@@ -3,8 +3,8 @@
 
 #include <glm\vec2.hpp>
 
-#include "Texture.h"
 #include "SpriteRenderer.h"
+#include "Texture.h"
 
 class Layer
 {
@@ -13,7 +13,7 @@ public:
 	Layer(Texture sprite, glm::vec2 pos, glm::vec2 size, float z, float parallax, glm::vec2 worldCenter);
 	~Layer();
 
-	void Draw(SpriteRenderer& renderer, glm::vec2 center);
+	void Draw(SpriteRenderer & renderer, glm::vec2 center);
 
 private:
 	Texture sprite;

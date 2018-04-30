@@ -4,6 +4,7 @@ bool CollisionManager::Colided(GameObject * obj1, GameObject * obj2)
 {
 	glm::vec2 pos1 = obj1->GetPos() + obj1->GetCOM();
 	glm::vec2 pos2 = obj2->GetPos() + obj2->GetCOM();
+	//colisao entre dois circulos
 	float dist = glm::distance(pos1, pos2);
 
 	return (dist <= obj1->GetRadius() + obj2->GetRadius());

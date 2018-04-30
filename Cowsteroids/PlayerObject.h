@@ -2,10 +2,10 @@
 #define PLAYER_OBJECT_H
 
 #include <glm\vec2.hpp>
-#include <glm\vec3.hpp>
 
-#include "GameObject.h"
 #include "Configuration.h"
+#include "GameObject.h"
+#include "Texture.h"
 
 class PlayerObject : public GameObject
 {
@@ -13,6 +13,7 @@ public:
 	PlayerObject(glm::vec2 pos, Texture sprite, Configuration config);
 	~PlayerObject();
 
+	//movimenta na direcao que esta virado
 	void Update(float dt) override;
 
 	void RotateCW(float dt);
@@ -23,7 +24,7 @@ public:
 private:
 	float acceleration;
 	float accelerationRate;
-	float desacceleration;
+	float desaccelerationRate;
 	float maxSpeed;
 	float rotationSpeed;
 };

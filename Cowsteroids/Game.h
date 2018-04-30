@@ -1,16 +1,17 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <glm\vec2.hpp>
-#include <vector>
 #include <string>
+#include <vector>
+
+#include <glm\vec2.hpp>
 
 #include "Camera.h"
-#include "SpriteRenderer.h"
-#include "PlayerObject.h"
 #include "CowObject.h"
-#include "ShotObject.h"
 #include "Layer.h"
+#include "PlayerObject.h"
+#include "ShotObject.h"
+#include "SpriteRenderer.h"
 
 class Game
 {
@@ -32,10 +33,8 @@ public:
 private:
 	int score;
 	bool isOver;
-	float spawnCounter;
-	float spawnDelay;
 	std::vector<CowObject *> cows;
-	std::vector<ShotObject *>shots;
+	std::vector<ShotObject *> shots;
 	glm::vec2 windowSize;
 	glm::vec2 worldSize;
 	std::vector<Layer *> layers;

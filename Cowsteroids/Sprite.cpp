@@ -21,6 +21,7 @@ Sprite::~Sprite()
 
 void Sprite::Draw(SpriteRenderer & renderer, float z, glm::vec2 pos, glm::vec2 size, float dt, float rotation, glm::vec3 color)
 {
+	//o offset do frame atual na sprite sheet
 	float offset = (float)currentFrame / frameCount;
 
 	renderer.DrawSprite(this->texture, pos, size, z, offset, this->frameCount, rotation, color);
@@ -29,6 +30,7 @@ void Sprite::Draw(SpriteRenderer & renderer, float z, glm::vec2 pos, glm::vec2 s
 	if (currentDuration >= frameDuration)
 	{
 		currentDuration = 0.0f;
+
 		currentFrame++;
 		if (currentFrame == frameCount)
 		{

@@ -11,14 +11,14 @@ Configuration::Configuration(std::vector<std::string> file)
 
 	for (std::string line : file)
 	{
-		std::vector<std::string> pair = splitString(line, ':');
-		std::vector<std::string> values = splitString(pair[1], '/');
+		std::vector<std::string> pair = Configuration::splitString(line, ':');
+		std::vector<std::string> values = Configuration::splitString(pair[1], '/');
 
 		std::map<std::string, std::string> map2;
 
 		for (std::string value : values)
 		{
-			std::vector<std::string> vec = splitString(value, '-');
+			std::vector<std::string> vec = Configuration::splitString(value, '-');
 			map2[vec[0]] = vec[1];
 		}
 
@@ -30,6 +30,7 @@ Configuration::Configuration(std::vector<std::string> file)
 
 Configuration::~Configuration()
 {
+
 }
 
 std::map<std::string, std::string> Configuration::operator[](std::string key)

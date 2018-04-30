@@ -10,7 +10,7 @@ PlayerObject::PlayerObject(glm::vec2 pos, Texture sprite, Configuration config)
 	this->speed = 0.0f;
 	this->acceleration = 0.0f;
 	this->accelerationRate = std::stof(config["acceleration"]["a"]);
-	this->desacceleration = std::stof(config["desacceleration"]["d"]);
+	this->desaccelerationRate = std::stof(config["desacceleration"]["d"]);
 	this->maxSpeed = std::stof(config["speed"]["s"]);
 	this->rotationSpeed = std::stof(config["rotation"]["r"]);
 }
@@ -22,42 +22,42 @@ PlayerObject::~PlayerObject()
 
 void PlayerObject::Update(float dt)
 {
-	speed += acceleration;
+	this->speed += this->acceleration;
 
-	if (speed > maxSpeed)
+	if (this->speed > this->maxSpeed)
 	{
-		speed = maxSpeed;
+		this->speed = this->maxSpeed;
 	}
 
-	glm::vec2 dir(speed * cos(rotation), speed * sin(rotation));
+	glm::vec2 dir(this->speed * cos(this->rotation), this->speed * sin(this->rotation));
 
-	position += dir;
+	this->position += dir;
 }
 
 void PlayerObject::RotateCW(float dt)
 {
-	rotation += rotationSpeed * dt;
+	this->rotation += this->rotationSpeed * dt;
 }
 
 void PlayerObject::RotateCCW(float dt)
 {
-	rotation -= rotationSpeed * dt;
+	this->rotation -= this->rotationSpeed * dt;
 }
 
 void PlayerObject::Move(float dt)
 {
-	acceleration += accelerationRate * dt;
+	this->acceleration += this->accelerationRate * dt;
 }
 
 void PlayerObject::Stop(float dt)
 {
-	acceleration = 0.0f;
-	if (speed > 0.0f)
+	this->acceleration = 0.0f;
+	if (this->speed > 0.0f)
 	{
-		speed -= desacceleration * dt;
+		this->speed -= this->desaccelerationRate * dt;
 	}
 	else
 	{
-		speed = 0.0f;
+		this->speed = 0.0f;
 	}
 }
