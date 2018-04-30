@@ -28,6 +28,7 @@ protected:
 	glm::vec2 size;
 	glm::vec3 color;
 	float rotation;
+	int rotationDirection;
 
 	Sprite sprite;
 

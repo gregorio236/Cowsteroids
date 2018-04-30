@@ -17,6 +17,8 @@ Game::Game(glm::vec2 windowSize)
 	this->worldSize = glm::vec2(1920.0f, 1080.0f);
 	this->isOver = false;
 	this->score = 0;
+	this->spawnCounter = 0.0f;
+	this->spawnDelay = 5.0f;
 	std::cout << "Score: " << score << std::endl;
 }
 
@@ -45,7 +47,7 @@ void Game::Initialize()
 	ResourceManager::GetShader("sprite").Use().SetUniform("image", 0);
 
 	ResourceManager::LoadTexture("../Assets/stars.png", true, "stars");
-	ResourceManager::LoadTexture("../Assets/cow2.png", true, "cow");
+	ResourceManager::LoadTexture("../Assets/cow3.png", true, "cow");
 	ResourceManager::LoadTexture("../Assets/ship2.png", true, "ship");
 	ResourceManager::LoadTexture("../Assets/shot.png", true, "shot");
 	ResourceManager::LoadTexture("../Assets/planet1.png", true, "planet1");
@@ -74,14 +76,18 @@ void Game::Initialize()
 	float x = (rand() % ((int)this->worldSize.x - 200)) + 100;
 	float y = (rand() % ((int)this->worldSize.y - 200)) + 100;
 	layers.push_back(new Layer(ResourceManager::GetTexture("planet1"), glm::vec2(x, y), glm::vec2(150.0f, 150.0f), 0.1f, 0.1f, this->worldSize*0.5f));
+	
 	x = (rand() % ((int)this->worldSize.x - 200)) + 100;
 	y = (rand() % ((int)this->worldSize.y - 200)) + 100;
 	layers.push_back(new Layer(ResourceManager::GetTexture("planet3"), glm::vec2(x, y), glm::vec2(300.0f, 300.0f), 0.2f, 0.2f, this->worldSize*0.5f));
+	
 	x = (rand() % ((int)this->worldSize.x - 200)) + 100;
 	y = (rand() % ((int)this->worldSize.y - 200)) + 100;
 	layers.push_back(new Layer(ResourceManager::GetTexture("planet2"), glm::vec2(x, y), glm::vec2(500.0f, 500.0f), 0.3f, 0.3f, this->worldSize*0.5f));
+	
 	glm::vec2 sunSize = glm::vec2(50.0f, 50.0f);
 	layers.push_back(new Layer(ResourceManager::GetTexture("sun"), ((this->worldSize - sunSize)*0.5f), sunSize, -0.8f, 0.9f, this->worldSize*0.5f));
+	
 	layers.push_back(new Layer(ResourceManager::GetTexture("stars"), glm::vec2(0.0f, 0.0f), this->worldSize, -0.9f, 1.0f, this->worldSize*0.5f));
 }
 
@@ -115,6 +121,13 @@ void Game::HandleInput(float dt)
 
 void Game::Update(float dt)
 {
+	spawnCounter += dt;
+	if (cows.size() < 10 || spawnCounter >= spawnDelay)
+	{
+		spawnCounter = 0.0f;
+		cows.push_back(this->SpawnCow(true));
+	}
+
 	for (CowObject * cow : cows)
 	{
 		cow->Update(dt);
@@ -305,14 +318,14 @@ void Game::ShotCollisions()
 	}
 }
 
-CowObject * Game::SpawnCow(bool avoidCenter)
+CowObject * Game::SpawnCow(bool avoidPlayer)
 {
 	CowObject * cow;
 	float x;
 	float y;
 
 	x = (rand() % ((int)this->worldSize.x - 400)) + 200;
-	if (avoidCenter)
+	if (avoidPlayer)
 	{
 		while (x < player->GetPos().x + 200 && x > player->GetPos().x - 200)
 		{
@@ -321,7 +334,7 @@ CowObject * Game::SpawnCow(bool avoidCenter)
 	}
 
 	y = (rand() % ((int)this->worldSize.y - 400)) + 200;
-	if (avoidCenter)
+	if (avoidPlayer)
 	{
 		while (y < player->GetPos().y + 200 && x > player->GetPos().y - 200)
 		{

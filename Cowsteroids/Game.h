@@ -32,6 +32,8 @@ public:
 private:
 	int score;
 	bool isOver;
+	float spawnCounter;
+	float spawnDelay;
 	std::vector<CowObject *> cows;
 	std::vector<ShotObject *>shots;
 	glm::vec2 windowSize;
@@ -46,7 +48,7 @@ private:
 	void CowCollisions();
 	void ShotCollisions();
 
-	CowObject * SpawnCow(bool avoidCenter = false);
+	CowObject * SpawnCow(bool avoidPlayer = false);
 };
 
 #endif
